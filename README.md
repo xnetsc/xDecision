@@ -73,17 +73,17 @@ with xdecision.load("models/gguf/xDecision-F16.gguf", device="cpu") as model:
 | Wikipedia 派生留出 | 1,500 | 60.73% | 91.47% |
 | 提示注入切片 | 116 | 64.66% | 67.24% |
 
-同机对比：Apple M5、CPU FP32、4 线程、短 choice 请求，预热 2 次、计时 20 次。耗时使用原 checkpoint；峰值 RSS 覆盖模型加载及整套测试。
+性能测试：Apple M5、CPU FP32、4 线程、短 choice 请求，预热 2 次、计时 20 次。耗时使用原 checkpoint；峰值 RSS 覆盖模型加载及整套测试。
 
-| 指标 | xDecision | NanoJev 官方检查点 |
-|---|---:|---:|
-| 基础定向探针 | 28/29 | 12/29 |
-| 相对程度探针 | 7/16 | 11/16 |
-| 延迟中位数 / P95 | 24.52 / 24.91 ms | 120.81 / 122.43 ms |
-| 加载耗时 | 1.81 s | 5.23 s |
-| 峰值进程 RSS | 3.47 GB | 5.24 GB |
+| 指标 | xDecision |
+|---|---:|
+| 基础定向探针 | 28/29 |
+| 相对程度探针 | 7/16 |
+| 延迟中位数 / P95 | 24.52 / 24.91 ms |
+| 加载耗时 | 1.81 s |
+| 峰值进程 RSS | 3.47 GB |
 
-xDecision 在这组测试中的基础判读、延迟和资源占用更好，NanoJev 的相对程度判断更好。Q8_0 解量化后完成 15 套复测，准确率最大下降 **0.45 个百分点**，详见 [量化验证](evaluation/validation.json)。
+Q8_0 解量化后完成 15 套复测，准确率最大下降 **0.45 个百分点**，详见 [量化验证](evaluation/validation.json)。
 
 ### 已知限制
 
