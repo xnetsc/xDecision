@@ -29,7 +29,7 @@ xDecision is a multilingual structured decision model with approximately 322M pa
 - `score`: assign a score on an ordered scale.
 - Returns candidate probabilities and an act/escalate recommendation.
 
-The release includes the original checkpoint, F16/Q8_0 GGUF files, redistributable training data, and continued-training code for CUDA, Apple MPS, and CPU.
+The release includes the original checkpoint, F16/Q8_0 GGUF files, redistributable training data, and continued-training code for CUDA, Apple MPS, and CPU. Apple Silicon also has a native MLX inference backend.
 
 ### Intended use
 
@@ -59,6 +59,40 @@ with xdecision.load("models/gguf/xDecision-F16.gguf", device="cpu") as model:
 ```
 
 The input limit is 1,024 tokens, with a 256-token budget for the question and candidates. `probabilities` contains candidate probabilities; `action.act_probability` is the action-head output. `answer_confidence` and the compatibility field `confidence` retain their upstream definitions and should be interpreted separately.
+
+### Native Apple Silicon inference
+
+Install `pip install -e '.[apple]'` and select the MLX backend:
+
+```python
+with xdecision.load("models/gguf/xDecision-F16.gguf", backend="mlx") as model:
+    result = model.predict(state, questions)
+```
+
+MLX defaults to Apple GPU FP16, with weights resident in memory. It reads checkpoint directories and complete GGUF files directly, without writing restored checkpoints. Q8_0 is dequantized once at load into dense FP16 arrays. `batch_size=8` reduces question-batch memory. The default `backend="torch"` preserves CPU/CUDA/MPS operation.
+
+For strict FP32, launch Python with `MLX_ENABLE_TF32=0` set before importing MLX, then pass `dtype="float32"`. [MLX's default FP32 matrix operations may use reduced internal precision](https://ml-explore.github.io/mlx/build/html/usage/precision.html); changing the array dtype alone is insufficient.
+
+The two backends use the same prompt construction and answer schema. MLX applies stored calibration temperatures unchanged and retains the action head; it does not cache answers or reuse contextual encoder states across questions. Shared state is tokenized once per request. Loading time and first-request initialization are separate from warm inference latency.
+
+Apple M5, 24 GiB, same checkpoint, 5 warm-ups and 30 timed requests per workload; sequential, synchronized end-to-end inference, `MLX_ENABLE_TF32=0`:
+
+| Backend | Short choice median / P95 | Short choice+noul+score median | Three 1,024-token questions median |
+|---|---:|---:|---:|
+| PyTorch CPU, 4 threads | 25.01 / 26.35 ms | 59.27 ms | 1,033.57 ms |
+| PyTorch MPS | 14.11 / 15.09 ms | 28.99 ms | 424.48 ms |
+| MLX strict FP32 | 8.65 / 9.25 ms | 27.44 ms | 408.21 ms |
+| MLX FP16 | **5.21 / 6.07 ms** | **11.03 ms** | **125.09 ms** |
+
+Across 42 compatibility questions, all backends retained the CPU reference's top option. Strict FP32 outputs matched to four decimal places; FP16's largest candidate-probability difference was 0.003. F16 and Q8_0 GGUF loading also passed; the Q8_0 comparison uses its own PyTorch-restored reference. This measures backend fidelity, not improved model accuracy. MLX peak allocation across these workloads was 1.42 GB for FP16; this excludes other process memory. Checkpoint loading took 0.43 s and F16 GGUF loading 14.32 s in this session; they are excluded from warm latency. These are not fresh-process cold-start measurements. [Full measurements](evaluation/native_mlx.json).
+
+Reproduce from the repository root:
+
+```bash
+MLX_ENABLE_TF32=0 python -m xdecision.benchmark_runtime \
+  --checkpoint models/checkpoint --f16 models/gguf/xDecision-F16.gguf \
+  --q8 models/gguf/xDecision-Q8_0.gguf --output /tmp/xdecision-runtime.json
+```
 
 ### Training improvements
 
@@ -108,7 +142,7 @@ Dequantized Q8_0 was re-evaluated on 15 suites, with a maximum accuracy drop of 
 
 - **Relative suitability and order stability:** both GitHub and Hugging Face can host code, but ranking which is more suitable still produces errors. Some evidence-based scoring answers flip when fact order changes, and the same proposition can yield different results across question types.
 - **Unseen domains and high-confidence errors:** unseen-workflow accuracy is 34.40%. Typed ECE is 0.1236 and act AUROC is 0.6583; unseen-workflow act AUROC is 0.4926. High-risk uses require independent validation and human review.
-- **GGUF execution:** this repository's loader restores the custom `xdecision` architecture for PyTorch inference. Q8_0 reduces storage and is dequantized at runtime. llama.cpp and Ollama are not currently supported.
+- **GGUF execution:** the MLX backend loads the custom `xdecision` architecture directly; the PyTorch backend restores a temporary checkpoint. Both dequantize Q8_0 for dense inference. llama.cpp and Ollama are not currently supported.
 
 ### Files
 
@@ -184,7 +218,7 @@ Code and model are released under Apache-2.0, with the upstream mmBERT-base MIT 
 - `score`：在有序刻度上评分。
 - 输出选项概率及 act/escalate 执行建议。
 
-提供原始 checkpoint、F16/Q8_0 GGUF、可分发训练数据和续训代码，支持 CUDA、Apple MPS、CPU。
+提供原始 checkpoint、F16/Q8_0 GGUF、可分发训练数据和续训代码，支持 CUDA、Apple MPS、CPU；Apple Silicon 另有原生 MLX 推理后端。
 
 ### 适用场景
 
@@ -214,6 +248,40 @@ with xdecision.load("models/gguf/xDecision-F16.gguf", device="cpu") as model:
 ```
 
 输入上限 1,024 tokens，其中问题与选项预算 256 tokens。`probabilities` 为选项概率，`action.act_probability` 为执行头输出；`answer_confidence` 与兼容字段 `confidence` 沿用上游定义，使用时应分别解释。
+
+## Apple Silicon 原生推理
+
+安装 `pip install -e '.[apple]'` 后选择 MLX 后端：
+
+```python
+with xdecision.load("models/gguf/xDecision-F16.gguf", backend="mlx") as model:
+    result = model.predict(state, questions)
+```
+
+MLX 默认使用 Apple GPU FP16，权重常驻内存；直接读取 checkpoint 目录或完整 GGUF，不落盘还原模型。Q8_0 在加载时一次解量化为稠密 FP16 数组。`batch_size=8` 可降低问题批次的内存占用。默认 `backend="torch"` 保留 CPU/CUDA/MPS 路径。
+
+严格 FP32 需在启动 Python、导入 MLX 之前设置 `MLX_ENABLE_TF32=0`，再传入 `dtype="float32"`。[MLX 默认可能降低 FP32 矩阵运算的内部精度](https://ml-explore.github.io/mlx/build/html/usage/precision.html)，仅修改数组类型不够。
+
+两后端采用相同的提示构造和返回字段。MLX 原样应用保存的校准温度，保留 act 头；不缓存答案、不跨问题复用上下文编码结果，同一请求的状态仅分词一次。模型加载、首次请求初始化与预热后推理延迟分别计量。
+
+Apple M5、24 GiB、相同 checkpoint，每组预热 5 次、计时 30 次；串行执行、同步计时、端到端推理，`MLX_ENABLE_TF32=0`：
+
+| 后端 | 短 choice 中位 / P95 | 短 choice+noul+score 中位 | 三道 1,024-token 问题中位 |
+|---|---:|---:|---:|
+| PyTorch CPU，4 线程 | 25.01 / 26.35 ms | 59.27 ms | 1,033.57 ms |
+| PyTorch MPS | 14.11 / 15.09 ms | 28.99 ms | 424.48 ms |
+| MLX 严格 FP32 | 8.65 / 9.25 ms | 27.44 ms | 408.21 ms |
+| MLX FP16 | **5.21 / 6.07 ms** | **11.03 ms** | **125.09 ms** |
+
+42 道兼容性问题中，各后端最高概率选项均与 CPU 基准一致。严格 FP32 公开输出一致到四位小数；FP16 选项概率最大差 0.003。F16、Q8_0 GGUF 加载路径也通过检查，Q8_0 以同文件还原的 PyTorch 结果为基准。这是后端保真验证，不代表模型准确度提升。上述负载下 FP16 的 MLX 峰值分配为 1.42 GB，不包含进程的其它内存。本次会话 checkpoint 加载 0.43 秒、F16 GGUF 加载 14.32 秒，不计入预热后延迟，也不作为全新进程冷启动结果。[完整测量](evaluation/native_mlx.json)。
+
+在仓库根目录复现：
+
+```bash
+MLX_ENABLE_TF32=0 python -m xdecision.benchmark_runtime \
+  --checkpoint models/checkpoint --f16 models/gguf/xDecision-F16.gguf \
+  --q8 models/gguf/xDecision-Q8_0.gguf --output /tmp/xdecision-runtime.json
+```
 
 ## 训练优化
 
@@ -263,7 +331,7 @@ Q8_0 解量化后完成 15 套复测，准确率最大下降 **0.45 个百分点
 
 - **相对适配度与顺序稳定性**：GitHub/HF 都可存代码，但“哪个更适合”的排序仍有错误；部分有事实评分题会随事实顺序翻转，同命题跨题型结果也存在差异。
 - **未见领域与高置信错误**：未见工作流准确率 34.40%；Typed ECE 0.1236、act AUROC 0.6583，未见工作流 act AUROC 0.4926。高风险用途需独立验收和人工复核。
-- **GGUF 运行**：自定义 `xdecision` 架构由本仓库加载器还原后交给 PyTorch；Q8_0 节省存储，运行时解量化。llama.cpp / Ollama 暂不支持。
+- **GGUF 运行**：MLX 直接加载自定义 `xdecision` 架构，PyTorch 路径先还原临时 checkpoint；两者均将 Q8_0 解量化后执行稠密推理。llama.cpp / Ollama 暂不支持。
 
 ## 文件
 

@@ -1,10 +1,11 @@
-"""Laya (ModernBERT/mmBERT encoder + decision head) in MLX, for training on Apple silicon.
+"""ModernBERT/mmBERT encoder and complete xDecision heads in native MLX.
 
 Parameter names mirror the PyTorch state dict exactly, so a checkpoint loads and
 exports one-to-one (see load_laya / export_laya).
 
-Parameters stay fp32; matmuls and attention run in `cdt` (bf16 by default); norms, softmax and
-the loss run in fp32.
+Training defaults to fp32 parameters/residuals and bf16 matmuls/attention.
+Inference may use resident fp16 parameters and residuals; output logits and
+action probabilities retain fp32 computation.
 """
 import json
 import os
@@ -24,8 +25,8 @@ def _lin(x, m, cdt):
     return y
 
 
-def _ln(x, m, eps):
-    return mx.fast.layer_norm(x.astype(mx.float32), m.weight, m["bias"] if "bias" in m else None, eps)
+def _ln(x, m, eps, dtype=mx.float32):
+    return mx.fast.layer_norm(x.astype(dtype), m.weight, m["bias"] if "bias" in m else None, eps)
 
 
 class Embeddings(nn.Module):
@@ -93,8 +94,9 @@ class Head(nn.Module):
 
 
 class LayaMLX(nn.Module):
-    def __init__(self, enc_cfg, head_layers=2, n_act=2):
+    def __init__(self, enc_cfg, head_layers=2, n_act=2, hidden_dtype=mx.float32):
         super().__init__()
+        self.hidden_dtype = hidden_dtype
         d = enc_cfg["hidden_size"]
         self.ecfg = enc_cfg
         self.encoder = Encoder(enc_cfg)
@@ -118,49 +120,49 @@ class LayaMLX(nn.Module):
         dh = D // H
         qkv = _lin(x, layer.attn.Wqkv, cdt).reshape(B, L, 3, H, dh)
         q, k, v = (qkv[:, :, i].transpose(0, 2, 1, 3) for i in range(3))
-        q = mx.fast.rope(q.astype(mx.float32), dh, traditional=False, base=self.theta[lt], scale=1.0, offset=0).astype(cdt)
-        k = mx.fast.rope(k.astype(mx.float32), dh, traditional=False, base=self.theta[lt], scale=1.0, offset=0).astype(cdt)
+        q = mx.fast.rope(q.astype(self.hidden_dtype), dh, traditional=False, base=self.theta[lt], scale=1.0, offset=0).astype(cdt)
+        k = mx.fast.rope(k.astype(self.hidden_dtype), dh, traditional=False, base=self.theta[lt], scale=1.0, offset=0).astype(cdt)
         o = mx.fast.scaled_dot_product_attention(q, k, v, scale=dh ** -0.5, mask=masks[lt])
         return _lin(o.transpose(0, 2, 1, 3).reshape(B, L, D), layer.attn.Wo, cdt)
 
     def encode(self, ids, att, cdt=mx.bfloat16):
         B, L = ids.shape
-        x = _ln(self.encoder.embeddings.tok_embeddings(ids), self.encoder.embeddings.norm, self.eps)
+        x = _ln(self.encoder.embeddings.tok_embeddings(ids), self.encoder.embeddings.norm, self.eps, self.hidden_dtype)
         keep = att.astype(mx.bool_)[:, None, None, :]
         pos = mx.arange(L)
         band = mx.abs(pos[:, None] - pos[None, :]) <= self.window
-        neg = mx.array(-1e9, dtype=cdt)
+        neg = mx.array(-float('inf'), dtype=cdt)
         zero = mx.array(0.0, dtype=cdt)
         masks = {"full_attention": mx.where(keep, zero, neg),
-                 "sliding_attention": mx.where(keep & band[None, None], zero, neg)}
+                 "sliding_attention": mx.where(keep & (band[None, None] | ~att.astype(mx.bool_)[:, None, :, None]), zero, neg)}
         for i, layer in enumerate(self.encoder.layers):
             lt = self.layer_types[i]
-            h = _ln(x, layer.attn_norm, self.eps) if i > 0 else x
-            x = x + self._attention(h, layer, masks, lt, cdt).astype(mx.float32)
-            h = _ln(x, layer.mlp_norm, self.eps)
+            h = _ln(x, layer.attn_norm, self.eps, self.hidden_dtype) if i > 0 else x
+            x = x + self._attention(h, layer, masks, lt, cdt).astype(self.hidden_dtype)
+            h = _ln(x, layer.mlp_norm, self.eps, self.hidden_dtype)
             a, g = mx.split(_lin(h, layer.mlp.Wi, cdt), 2, axis=-1)
-            x = x + _lin(nn.gelu(a) * g, layer.mlp.Wo, cdt).astype(mx.float32)
-        return _ln(x, self.encoder.final_norm, self.eps)
+            x = x + _lin(nn.gelu(a) * g, layer.mlp.Wo, cdt).astype(self.hidden_dtype)
+        return _ln(x, self.encoder.final_norm, self.eps, self.hidden_dtype)
 
     # ------------------------------------------------------------------ decision head
     def _head_layer(self, x, hl, keymask, cdt, train):
         B, L, D = x.shape
         H = max(1, D // 64)
         dh = D // H
-        h = _ln(x, hl.norm1, 1e-5)
+        h = _ln(x, hl.norm1, 1e-5, self.hidden_dtype)
         w, b = hl.self_attn.in_proj_weight, hl.self_attn.in_proj_bias
         qkv = h.astype(cdt) @ w.astype(cdt).T + b.astype(cdt)
         q, k, v = (t.reshape(B, L, H, dh).transpose(0, 2, 1, 3) for t in mx.split(qkv, 3, axis=-1))
         o = mx.fast.scaled_dot_product_attention(q, k, v, scale=dh ** -0.5, mask=keymask)
-        o = _lin(o.transpose(0, 2, 1, 3).reshape(B, L, D), hl.self_attn.out_proj, cdt).astype(mx.float32)
+        o = _lin(o.transpose(0, 2, 1, 3).reshape(B, L, D), hl.self_attn.out_proj, cdt).astype(self.hidden_dtype)
         if train:
             o = _dropout(o, self.head_dropout)
         x = x + o
-        h = _ln(x, hl.norm2, 1e-5)
+        h = _ln(x, hl.norm2, 1e-5, self.hidden_dtype)
         f = nn.relu(_lin(h, hl.linear1, cdt))
         if train:
             f = _dropout(f, self.head_dropout)
-        f = _lin(f, hl.linear2, cdt).astype(mx.float32)
+        f = _lin(f, hl.linear2, cdt).astype(self.hidden_dtype)
         if train:
             f = _dropout(f, self.head_dropout)
         return x + f
@@ -168,12 +170,12 @@ class LayaMLX(nn.Module):
     def __call__(self, ids, att, mpos, mmask, qtype, cdt=mx.bfloat16, train=False):
         h = self.encode(ids, att, cdt)
         h = h + self.type_emb(qtype)[:, None, :]
-        keymask = mx.where(att.astype(mx.bool_)[:, None, None, :], mx.array(0.0, cdt), mx.array(-1e9, cdt))
+        keymask = mx.where(att.astype(mx.bool_)[:, None, None, :], mx.array(0.0, cdt), mx.array(-float('inf'), cdt))
         for hl in self.head.layers:
             h = self._head_layer(h, hl, keymask, cdt, train)
         m = mx.take_along_axis(h, mpos[:, :, None], axis=1)
-        s = _ln(m, self.scorer[0], 1e-5)
-        s = nn.gelu(_lin(s, self.scorer[1], cdt).astype(mx.float32))
+        s = _ln(m, self.scorer[0], 1e-5, self.hidden_dtype)
+        s = nn.gelu(_lin(s, self.scorer[1], cdt).astype(self.hidden_dtype))
         logits = _lin(s, self.scorer[3], cdt).astype(mx.float32).squeeze(-1)
         logits = mx.where(mmask, logits, -1e4)
         p = mx.stop_gradient(mx.softmax(logits, axis=-1))
