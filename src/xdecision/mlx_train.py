@@ -2,8 +2,9 @@
 
   soft cross-entropy on the option-marker logits
 + laya's RLCD term (REINFORCE on Gaussian-perturbed logits, strictly proper reward)
-+ 0.1 x act-head loss: P(act) is trained to mean "this answer is right"; for items whose gold is
-  uniform (the answer is not determined by the state) the act target is "escalate".
++ act-head loss: target mass on the predicted candidate; uniform targets escalate
++ grouped consistency, uncertainty, high-confidence-error and selective-risk losses
+  enabled by configs/continue-mlx.args, shared with PyTorch
 
 Token embeddings are frozen (see train.py for why). The existing action head is preserved unless explicitly reset.
 """
@@ -13,7 +14,6 @@ import math
 import os
 import random
 import time
-from collections import defaultdict
 
 import mlx.core as mx
 import mlx.nn as nn
@@ -25,6 +25,7 @@ from mlx.utils import tree_flatten
 from .mlx_model import export_laya, load_laya
 from .model_io import DEFAULT_BASE, load_tokenizer
 from .train import collate, token_batches
+from .training_recipe import add_recipe_arguments, validate_recipe, grouped_batches, recipe_metadata
 
 QTYPE_SCORE = 1
 
@@ -50,14 +51,14 @@ def proper_reward(q, target, qtype, mask, w_sph=0.75, w_rps=1.0):
 
 def loss_fn(model, ids, att, mpos, mmask, qtype, target, equiv_group, support_index, support_flip,
             sigma, group=4, w_act=0.1, w_consistency=0.0, w_uncertain=0.0,
-            w_overconf=0.0, w_selective=0.0):
+            w_overconf=0.0, w_selective=0.0, noise=None):
     logits, act = model(ids, att, mpos, mmask, qtype, train=True)
     maskf = mmask.astype(mx.float32)
     logp = logits - mx.logsumexp(logits, axis=-1, keepdims=True)
     ce = -(target * logp).sum(-1).mean()
 
     k = maskf.sum(-1, keepdims=True)
-    eps = mx.random.normal((group,) + logits.shape) * sigma * maskf
+    eps = (mx.random.normal((group,) + logits.shape) if noise is None else noise) * sigma * maskf
     eps = (eps - eps.sum(-1, keepdims=True) / k) * maskf
     z = mx.stop_gradient(logits)[None] + eps
     q = mx.softmax(mx.where(mmask[None], z, -1e4), axis=-1)
@@ -109,27 +110,6 @@ def loss_fn(model, ids, att, mpos, mmask, qtype, target, equiv_group, support_in
     return total, (ce, rl, act_l, accuracy, consistency, uncertain, overconf, selective)
 
 
-def grouped_batches(items, max_tokens, max_items, rng):
-    groups = defaultdict(list)
-    for index, item in enumerate(items):
-        groups[item["equiv_group"]].append(index)
-    if not groups or any(len(indices) not in (6, 8) for indices in groups.values()):
-        raise ValueError("every equivalence group must have six or eight views")
-    by_len = defaultdict(list)
-    for indices in groups.values():
-        length = max(len(items[index]["ids"]) for index in indices)
-        padded = ((length + 63) // 64) * 64
-        by_len[(padded, len(indices))].append(indices)
-    batches = []
-    for (length, group_size), entries in by_len.items():
-        rng.shuffle(entries)
-        per = max(1, min(max_items // group_size, max_tokens // (length * group_size)))
-        for start in range(0, len(entries), per):
-            batches.append([index for group in entries[start:start + per] for index in group])
-    rng.shuffle(batches)
-    return batches
-
-
 def reset_act_head(model, seed=0):
     rng = np.random.default_rng(seed)
     for lyr in (model.act_head[0], model.act_head[2]):
@@ -164,13 +144,9 @@ def main():
     ap.add_argument("--cache-gb", type=float, default=3.0)
     ap.add_argument("--reset-act-head", action="store_true", help="Explicitly reset the action head")
     ap.add_argument("--seed", type=int, default=20260928)
-    ap.add_argument("--equiv", default=None, help="tokenized six-view equivalence groups")
-    ap.add_argument("--equiv-every", type=int, default=3, help="one grouped batch per N training steps")
-    ap.add_argument("--w-consistency", type=float, default=0.0)
-    ap.add_argument("--w-uncertain", type=float, default=0.0)
-    ap.add_argument("--w-overconf", type=float, default=0.0)
-    ap.add_argument("--w-selective", type=float, default=0.0)
+    add_recipe_arguments(ap)
     args = ap.parse_args()
+    validate_recipe(args)
 
     # MLX keeps freed buffers in a cache that is unbounded by default; on a machine that is
     # already swapping, that cache is what pushes the process into paging (measured: 19 GB
@@ -186,12 +162,12 @@ def main():
     n_train = sum(v.size for _, v in tree_flatten(model.trainable_parameters()))
     print(f"mlx device={mx.default_device()} trainable={n_train/1e6:.1f}M", flush=True)
 
-    items = torch.load(args.train, weights_only=False)
-    ep_batches = token_batches(items, args.max_tokens, args.max_items, rng, drop_last=True)
-    equiv_items = torch.load(args.equiv, weights_only=False) if args.equiv else []
-    if equiv_items and args.equiv_every < 2:
-        raise ValueError("--equiv-every must be at least 2")
-    eq_batches = grouped_batches(equiv_items, args.max_tokens, args.max_items, rng) if equiv_items else []
+    items = torch.load(args.train, map_location='cpu', weights_only=True)
+    if not items:
+        raise ValueError('Training data is empty')
+    ep_batches = token_batches(items, args.max_tokens, args.max_items, rng)
+    equiv_items = torch.load(args.equiv, map_location='cpu', weights_only=True) if args.equiv else []
+    eq_batches = grouped_batches(equiv_items, args.max_tokens, args.max_items, rng) if args.equiv else []
     multiplier = args.equiv_every / (args.equiv_every - 1) if equiv_items else 1.0
     total = max(1, int(len(ep_batches) * args.epochs * multiplier))
     warm = max(1, int(total * args.warmup))
@@ -238,7 +214,7 @@ def main():
             source = equiv_items
         else:
             if bi >= len(batches):
-                batches, bi = token_batches(items, args.max_tokens, args.max_items, rng, drop_last=True), 0
+                batches, bi = token_batches(items, args.max_tokens, args.max_items, rng), 0
             idx = batches[bi]
             bi += 1
             source = items
@@ -277,7 +253,8 @@ def main():
     cfg = dict(cfg)
     cfg["model_name"] = "xDecision"
     cfg["posttrain"] = {"steps": total, "items_seen": seen, "hours": round((time.time() - t0) / 3600, 2),
-                        "train_items": len(items), "framework": "mlx", "base_model": "xDecision"}
+                        "train_items": len(items), "framework": "mlx", "base_model": "xDecision",
+                        "recipe": recipe_metadata(args)}
     export_laya(model, cfg, args.base, os.path.join(args.out, "final"), meta={"done": True, **cfg["posttrain"]})
     print("DONE", json.dumps(cfg["posttrain"]), flush=True)
 

@@ -67,6 +67,12 @@ The input limit is 1,024 tokens, with a 256-token budget for the question and ca
 - Insufficient-evidence examples, grouped consistency and uncertainty objectives, and act/escalate-head training.
 - Frozen multilingual token embeddings, general-task replay, and temperature fitting by question type and candidate count.
 
+### Cross-format consistency
+
+The released weights were trained with a shared proposition-support constraint across `choice`, `noul`, and `score`. For equivalent views of the **same proposition**, training maps the positive choice probability, the noul true probability, and the normalized expected score onto a common support scale. Candidate permutations and reversed score scales are aligned before minimizing the mean squared support difference within each group. This is a training loss, not a post-processing rewrite of inference probabilities.
+
+On a small diagnostic set of six fact scenarios with 24 variant groups, the mean cross-format support range decreased from **0.273 to 0.135** after the combined post-training recipe; the final maximum range was **0.430**. This is not an isolated ablation of the consistency loss, and disagreement remains. A score expectation is a semantic-support proxy, not a calibrated probability. Feasibility, primary purpose, and relative suitability are different propositions and must not be forced to have equal support.
+
 ### Evaluation
 
 Accuracy measured with the same local evaluator is shown below. Full results are in [evaluation/metrics.json](evaluation/metrics.json). The overall Typed set includes workflow types covered during training; unseen workflows are reported separately. Basic probes are a development regression set.
@@ -127,6 +133,7 @@ Load existing weights from `models/checkpoint` with a newly initialized optimize
 
 ```bash
 python -m xdecision.data_cache --input data/train/continuation.jsonl.gz --output work/train.pt
+python -m xdecision.data_cache --input data/train/equivalence.jsonl.gz --output work/equivalence.pt
 python -m xdecision.train --dry-run
 python -m xdecision.train @configs/continue.args
 ```
@@ -156,7 +163,9 @@ Automatic priority is **CUDA → MPS → CPU**. With multiple CUDA GPUs, the dev
 
 Override precision with `--precision fp32`. To reduce memory usage, lower `--max-tokens` / `--max-items` and enable `--grad-ckpt`; use `--accum` to increase the effective batch size. Logs report device, precision, and memory usage. Training steps were verified on CPU/MPS. CUDA selection branches passed tests; validation on physical NVIDIA hardware remains pending.
 
-Apple Silicon also has an MLX entry point: install with `pip install -e '.[apple]'`, then run `python -m xdecision.mlx_train`. PyTorch uses soft CE, RLCD, and act losses. MLX additionally supports `--equiv`, `--w-consistency`, `--w-uncertain`, `--w-overconf`, and `--w-selective`; select the training recipe through its explicit entry point.
+Apple Silicon also has an MLX entry point: install with `pip install -e '.[apple]'`, then run `python -m xdecision.mlx_train @configs/continue-mlx.args`. Both continuation configurations load `configs/objective.args`: soft CE, RLCD, soft-label act supervision, cross-format consistency, uncertainty, high-confidence-error, and selective-risk objectives. Every third micro-batch contains intact equivalence groups. The shared weights are 0.5 for consistency, uncertainty, and high-confidence-error losses, and 0.2 for selective risk; act loss has weight 0.2 when equivalence data is supplied. Missing or malformed groups raise an error instead of silently disabling consistency. These are explicit continuation settings, not a reconstruction of the historical optimizer state; backend precision and optimizer schedules can differ.
+
+Custom equivalence data must preserve `equiv_group`, `support_index`, and `support_flip`, include all three question types in each six/eight-view group, and represent the same reference proposition. The trainer checks aligned target support and keeps groups in one micro-batch. `--max-items` and `--max-tokens` must fit a complete group. Continue to use independent calibration and evaluation after training.
 
 ### License
 
@@ -212,6 +221,12 @@ with xdecision.load("models/gguf/xDecision-F16.gguf", device="cpu") as model:
 - 覆盖事实顺序、选项顺序、同义改写及三种题型。
 - 引入证据不足样本、分组一致性和不确定性目标，训练 act/escalate 头。
 - 冻结多语 token embeddings，保留通用任务回放；按题型和选项数拟合温度。
+
+### 跨题型一致性
+
+发布权重训练时已使用 `choice`、`noul`、`score` 的统一命题支持度约束。对于表达**同一命题**的等价视图，将 choice 正选项概率、noul 的 true 概率和 score 的归一化期望映射到共同标尺；先对齐候选置换与反向刻度，再最小化组内支持度差的均方值。这是训练损失，不是在推理后改写概率。
+
+在六个事实场景、24 个变体组的小型诊断集上，经过组合后训练配方，平均跨题型支持度跨度由 **0.273 降至 0.135**，成品最大跨度仍为 **0.430**。这不是一致性损失的独立消融结果，差异也尚未消除。score 期望只是语义支持度代理，不是校准概率；可行性、主要用途和相对适配度是不同命题，不能强制对齐。
 
 ## 评测
 
@@ -273,6 +288,7 @@ F16 **704.10 MB**，包含全部 170 个张量及 tokenizer，可无损还原原
 
 ```bash
 python -m xdecision.data_cache --input data/train/continuation.jsonl.gz --output work/train.pt
+python -m xdecision.data_cache --input data/train/equivalence.jsonl.gz --output work/equivalence.pt
 python -m xdecision.train --dry-run
 python -m xdecision.train @configs/continue.args
 ```
@@ -302,7 +318,9 @@ python -m xdecision.gguf_io verify --checkpoint work/continued/final --gguf work
 
 `--precision fp32` 可覆盖精度；显存不足时减小 `--max-tokens` / `--max-items`，启用 `--grad-ckpt`，用 `--accum` 增大有效批量。日志输出设备、精度与内存占用。CPU/MPS 已通过训练步验证；CUDA 选择分支测试通过，NVIDIA 实卡验证待完成。
 
-Apple Silicon 另提供 MLX 入口：安装 `pip install -e '.[apple]'` 后运行 `python -m xdecision.mlx_train`。PyTorch 使用 soft CE、RLCD、act 损失；MLX 额外支持 `--equiv`、`--w-consistency`、`--w-uncertain`、`--w-overconf`、`--w-selective`，通过显式入口选择训练配方。
+Apple Silicon 另提供 MLX 入口：安装 `pip install -e '.[apple]'` 后运行 `python -m xdecision.mlx_train @configs/continue-mlx.args`。两份续训配置共同加载 `configs/objective.args`，使用 soft CE、RLCD、软标签 act 监督、跨题型一致性、不确定性、高置信错误惩罚和选择性风险目标。每三个微批次插入一个完整等价组批次；一致性、不确定性、高置信错误惩罚的权重均为 0.5，选择性风险为 0.2，提供等价组时 act 损失权重为 0.2。缺失或不合格的等价组直接报错，不会静默关闭一致性训练。这些是明确的续训配置，并非恢复历史优化器状态；不同后端的精度和优化器调度仍可能不同。
+
+自有等价组数据须保留 `equiv_group`、`support_index`、`support_flip`；每组六或八个视图覆盖三种题型，且表达同一个参考命题。训练器校验映射后的目标支持度，并保证整组进入同一微批次；`--max-items`、`--max-tokens` 必须容纳完整一组。续训后仍需独立校准与评测。
 
 ## 许可
 

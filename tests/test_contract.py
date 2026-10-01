@@ -36,6 +36,19 @@ class Contracts(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.encode([1,0],label=2)
 
+    def test_equivalence_metadata_is_preserved(self):
+        metadata = dict(equiv_group=17, support_index=1, support_flip=True)
+        row = self.encode([0, 1], **metadata)[0]
+        for key, value in metadata.items():
+            self.assertEqual(row[key], value)
+
+    def test_incomplete_equivalence_metadata_fails(self):
+        for metadata in (dict(equiv_group=1),
+                         dict(equiv_group=1, support_index=2, support_flip=False),
+                         dict(equiv_group=1, support_index=0, support_flip='false')):
+            with self.subTest(metadata=metadata), self.assertRaises(ValueError):
+                self.encode([1, 0], **metadata)
+
     def test_runtime_changes_name_only(self):
         from unittest.mock import Mock
         model = Model.__new__(Model)

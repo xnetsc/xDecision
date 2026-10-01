@@ -39,6 +39,14 @@ def prepare(path, checkpoint):
             raise ValueError(f'line {number}: labels/options differ')
         rows.append(dict(ids=ids,markers=positions,qtype=QTYPES[kind],target=target,
                          src=row.get('source','custom'),lang=row.get('language','en'),t=kind))
+        if any(key in row for key in ('equiv_group', 'support_index', 'support_flip')):
+            if (type(row.get('equiv_group')) is not int or row['equiv_group'] < 0
+                    or type(row.get('support_index')) is not int
+                    or not 0 <= row['support_index'] < len(target)
+                    or type(row.get('support_flip')) is not bool):
+                raise ValueError(f'line {number}: invalid equivalence metadata')
+            for key in ('equiv_group', 'support_index', 'support_flip'):
+                rows[-1][key] = row[key]
         if 'label' in row:
             if type(row['label']) is not int or not 0 <= row['label'] < len(target):
                 raise ValueError(f'line {number}: invalid label')

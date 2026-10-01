@@ -1,13 +1,9 @@
 --base
 models/checkpoint
---device
-auto
---precision
-auto
 --train
 work/train.pt
 --out
-work/continued
+work/continued-mlx
 --epochs
 1
 --max-tokens

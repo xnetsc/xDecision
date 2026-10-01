@@ -1,0 +1,12 @@
+--equiv
+work/equivalence.pt
+--equiv-every
+3
+--w-consistency
+0.5
+--w-uncertain
+0.5
+--w-overconf
+0.5
+--w-selective
+0.2

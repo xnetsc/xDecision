@@ -4,8 +4,9 @@ Loss per question (all on the model's own option-marker logits):
   * soft cross-entropy against the gold distribution            (what moves accuracy)
   * the official RLCD term: GRPO-style REINFORCE on Gaussian-perturbed logits with a strictly
     proper reward (log + spherical, + RPS for ordinal score)     (kept from laya's recipe)
-  * act head: P(act) is trained to mean "the current answer is right";
-    the existing trained head is preserved by default
+  * act head: target mass on the predicted candidate; uniform targets escalate
+  * optional same-proposition consistency, uncertainty and selective-risk losses
+    shared with MLX; configs/continue.args enables them
 
 Token embeddings are frozen: the 256k-row vocabulary covers 100+ languages and most rows are
 never seen in any fine-tuning batch; letting AdamW touch them only degrades languages the
@@ -25,6 +26,7 @@ from laya.common import proper_reward
 from .model_io import DEFAULT_BASE, load_model, load_tokenizer, save_checkpoint
 from .devices import (pick_device, pick_precision, autocast_context, synchronize,
                       memory_stats, device_info)
+from .training_recipe import add_recipe_arguments, validate_recipe, grouped_batches, recipe_metadata
 
 QTYPE_SCORE = 1
 
@@ -111,7 +113,18 @@ def reset_act_head(model):
             torch.nn.init.zeros_(m.bias)
 
 
-def loss_fn(logits, act_logits, batch, sigma, group=4, w_rl=1.0, w_act=0.1):
+def aligned_support(p, qtype, mask, support_index, support_flip):
+    nopts = mask.sum(-1).clamp_min(2).float()
+    levels = torch.arange(p.size(-1), device=p.device, dtype=p.dtype)
+    positive = p.gather(1, support_index[:, None])[:, 0]
+    ordinal = (p * levels).sum(-1) / (nopts - 1)
+    support = torch.where(qtype == QTYPE_SCORE, ordinal, positive)
+    return torch.where(support_flip.bool(), 1 - support, support)
+
+
+def loss_fn(logits, act_logits, batch, sigma, group=4, w_rl=1.0, w_act=0.1,
+            w_consistency=0.0, w_uncertain=0.0, w_overconf=0.0, w_selective=0.0,
+            noise=None):
     logits = logits.float()
     mask = batch["marker_mask"]
     target = batch["target"]
@@ -121,14 +134,14 @@ def loss_fn(logits, act_logits, batch, sigma, group=4, w_rl=1.0, w_act=0.1):
     ce = -(target * logp).sum(-1).mean()
 
     k = mask.sum(-1, keepdim=True).float()
-    eps = torch.randn((group,) + logits.shape, device=logits.device) * sigma * mask
+    eps = (torch.randn((group,) + logits.shape, device=logits.device) if noise is None else noise) * sigma * mask
     eps = (eps - eps.sum(-1, keepdim=True) / k) * mask
     z = logits.detach().unsqueeze(0) + eps
     q = torch.softmax(z.masked_fill(~mask, -1e4), -1)
     with torch.no_grad():
         r = proper_reward(q, target.unsqueeze(0), qtype, mask, w_sph=0.75, w_rps=1.0)
         adv = r - r.mean(0, keepdim=True)
-        adv = adv / (adv.std() + 1e-6)
+        adv = adv / (adv.std(unbiased=False) + 1e-6)
     lp = -(((z - logits.unsqueeze(0)) ** 2) * mask).sum(-1) / (2 * sigma ** 2)
     rl = -(adv * lp).mean()
 
@@ -144,11 +157,30 @@ def loss_fn(logits, act_logits, batch, sigma, group=4, w_rl=1.0, w_act=0.1):
             exp_pred = (p * levels).sum(-1)
             exp_gold = (target * levels).sum(-1)
             correct = torch.where(is_score, (exp_pred - exp_gold).abs() <= 0.5, correct)
-        act_target = (~correct).long()  # index 0 = act, 1 = escalate
-    act = torch.nn.functional.cross_entropy(act_logits.float(), act_target)
-    total = ce + w_rl * rl + w_act * act
+        nopts = mask.sum(-1).clamp_min(2).float()
+        determinate = target.max(-1).values >= 0.99
+        uniform = (target.max(-1).values - 1 / nopts).abs() < 1e-5
+        act_target = torch.where(uniform, 0.0, target.gather(1, pred[:, None])[:, 0])
+    act_logp = torch.log_softmax(act_logits.float(), -1)
+    act = -(act_target * act_logp[:, 0] + (1-act_target) * act_logp[:, 1]).mean()
+    p = torch.softmax(masked, -1)
+    support = aligned_support(p, qtype, mask, batch['support_index'], batch['support_flip'])
+    gids = batch['equiv_group']
+    pairs = ((gids[:, None] == gids[None, :]) & (gids[:, None] >= 0) &
+             ~torch.eye(len(gids), dtype=torch.bool, device=gids.device))
+    consistency = (((support[:, None]-support[None, :])**2)*pairs).sum()/pairs.sum().clamp_min(1)
+    maxp = p.max(-1).values
+    uncertain = (((maxp-1/nopts)**2)*uniform).sum()/uniform.sum().clamp_min(1)
+    gold_mass = (p*target).sum(-1)
+    overconf = ((maxp-0.8).clamp_min(0).square()*(1-gold_mass)*determinate).sum()/determinate.sum().clamp_min(1)
+    act_p = torch.softmax(act_logits.float(), -1)[:, 0]
+    selective = (act_p.square()*(1-gold_mass.detach()).square()*determinate).sum()/determinate.sum().clamp_min(1)
+    total = (ce + w_rl * rl + w_act * act + w_consistency * consistency +
+             w_uncertain * uncertain + w_overconf * overconf + w_selective * selective)
     return total, {"ce": ce.item(), "rl": rl.item(), "act": act.item(),
-                   "acc": correct.float().mean().item()}
+                   "acc": ((correct & determinate).float().sum()/determinate.sum().clamp_min(1)).item(),
+                   "consistency": consistency.item(), "uncertain": uncertain.item(),
+                   "overconf": overconf.item(), "selective": selective.item()}
 
 
 def param_groups(model, lr_enc, lr_head, wd):
@@ -193,6 +225,7 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="Print selected hardware without loading data/model")
     ap.add_argument("--grad-ckpt", action="store_true")
     ap.add_argument("--seed", type=int, default=20260928)
+    add_recipe_arguments(ap)
     args = ap.parse_args()
 
     torch.manual_seed(args.seed)
@@ -203,6 +236,7 @@ def main():
     print(json.dumps(hardware), flush=True)
     if args.dry_run:
         return
+    validate_recipe(args)
     if args.epochs <= 0 or min(args.accum, args.max_items, args.max_tokens) <= 0:
         ap.error("epochs, accum, max-items and max-tokens must be positive")
     if args.bench < 0 or args.save_every < 0:
@@ -238,7 +272,10 @@ def main():
     print(f"train items: {len(items)}", flush=True)
 
     ep_batches = token_batches(items, args.max_tokens, args.max_items, rng)
-    total_micro = int(len(ep_batches) * args.epochs)
+    equiv_items = torch.load(args.equiv, map_location='cpu', weights_only=True) if args.equiv else []
+    eq_batches = grouped_batches(equiv_items, args.max_tokens, args.max_items, rng) if args.equiv else []
+    multiplier = args.equiv_every / (args.equiv_every-1) if eq_batches else 1.0
+    total_micro = int(len(ep_batches) * args.epochs * multiplier)
     if args.bench:
         total_micro = min(total_micro, args.bench)
     if total_micro < 1:
@@ -258,26 +295,37 @@ def main():
     synchronize(device)
     t0 = time.time()
     micro, step, seen, tokens = 0, 0, 0, 0
-    agg = {"ce": 0.0, "rl": 0.0, "act": 0.0, "acc": 0.0, "n": 0}
+    metric_keys = ('ce', 'rl', 'act', 'acc', 'consistency', 'uncertain', 'overconf', 'selective')
+    agg = dict.fromkeys((*metric_keys, 'n'), 0.0)
+    eqi = 0
     epoch = 0
     batches = ep_batches
     bi = 0
     opt.zero_grad(set_to_none=True)
     while micro < total_micro:
-        if bi >= len(batches):
-            epoch += 1
-            batches = token_batches(items, args.max_tokens, args.max_items, rng)
-            bi = 0
-        idx = batches[bi]
-        bi += 1
-        b = collate([items[i] for i in idx], tok.pad_token_id)
+        if eq_batches and (micro + 1) % args.equiv_every == 0:
+            if eqi >= len(eq_batches):
+                eq_batches, eqi = grouped_batches(equiv_items, args.max_tokens, args.max_items, rng), 0
+            idx, source = eq_batches[eqi], equiv_items
+            eqi += 1
+        else:
+            if bi >= len(batches):
+                epoch += 1
+                batches = token_batches(items, args.max_tokens, args.max_items, rng)
+                bi = 0
+            idx, source = batches[bi], items
+            bi += 1
+        b = collate([source[i] for i in idx], tok.pad_token_id)
         b = {k: (v.pin_memory().to(device, non_blocking=True) if device.type == "cuda" else v.to(device))
              for k, v in b.items()}
         progress = micro / max(1, total_micro)
         sigma = args.sigma_start + (args.sigma_end - args.sigma_start) * progress
         with autocast_context(device, precision):
             logits, act_logits = forward(model, b)
-        loss, parts = loss_fn(logits, act_logits, b, sigma)
+        loss, parts = loss_fn(logits, act_logits, b, sigma,
+                             w_act=0.2 if eq_batches else 0.1,
+                             w_consistency=args.w_consistency, w_uncertain=args.w_uncertain,
+                             w_overconf=args.w_overconf, w_selective=args.w_selective)
         if not torch.isfinite(loss).item():
             raise FloatingPointError("Non-finite training loss; no automatic device/precision fallback")
         window_start = (micro // args.accum) * args.accum
@@ -286,7 +334,7 @@ def main():
         micro += 1
         seen += len(idx)
         tokens += int(b["attention_mask"].sum())
-        for k in ("ce", "rl", "act", "acc"):
+        for k in metric_keys:
             agg[k] += parts[k]
         agg["n"] += 1
         if micro % args.accum == 0 or micro == total_micro:
@@ -311,11 +359,11 @@ def main():
                        "eta_h": round((total_micro - micro) * (el / micro) / 3600, 2),
                        "lr_enc": opt.param_groups[0]["lr"], "sigma": round(sigma, 3),
                        **hardware, "memory": memory_stats(device),
-                       **{k: round(agg[k] / agg["n"], 4) for k in ("ce", "rl", "act", "acc")}}
+                       **{k: round(agg[k] / agg["n"], 4) for k in metric_keys}}
                 print(json.dumps(rec), flush=True)
                 log.write(json.dumps(rec) + "\n")
                 log.flush()
-                agg = {"ce": 0.0, "rl": 0.0, "act": 0.0, "acc": 0.0, "n": 0}
+                agg = dict.fromkeys((*metric_keys, 'n'), 0.0)
             if args.save_every and step % args.save_every == 0 and not args.bench:
                 save_checkpoint(model, cfg, args.base, os.path.join(args.out, "rolling"),
                                 meta={"step": step, "of": total_steps})
@@ -332,7 +380,7 @@ def main():
     cfg.setdefault("posttrain", {})
     cfg["posttrain"] = {"steps": step, "micro_batches": micro, "items_seen": seen,
                         "hours": round((time.time() - t0) / 3600, 2), "base_model": "xDecision",
-                        "hardware": hardware}
+                        "hardware": hardware, "recipe": recipe_metadata(args)}
     save_checkpoint(model, cfg, args.base, os.path.join(args.out, "final"),
                     meta={"step": step, "of": total_steps, "done": True})
     print("DONE", json.dumps(cfg["posttrain"]), flush=True)
