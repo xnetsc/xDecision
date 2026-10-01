@@ -1,19 +1,19 @@
 # 数据
 
-这是成品实际使用的数据的**可再分发部分**，不是全部原始混合数据，也不是新生成的替代样本。精确数量、来源、许可与未分发来源见 `manifest.json`。
+成品实际使用的训练数据，按已核实的来源许可分发。各阶段数量、来源、许可与缺项见 `manifest.json`。
 
-目录按用途划分：`train/` 是训练数据，`calibration/` 用于温度拟合，`test/` 是内部留出。不同训练阶段存在回放与重复，不能把所有文件简单拼接后称为独立样本。历史阶段只用于溯源与按需续训，不包含失败实验样本或训练日志。
+`train/` 用于训练，`calibration/` 用于温度拟合，`test/` 用于内部验证。不同阶段包含回放和重复，使用时按阶段选择。
 
-格式为 gzip 压缩的 JSONL，保存原 token IDs、选项标记位置、题型和监督分布，避免解码再分词改变实际训练输入。`original_row` 对应原混合数据的位置，保留重复与相对顺序；`src` 的工作流监督名称作了公开整理。tokenizer 位于 `models/checkpoint/tokenizer/`。这些是可解码的训练文本，不是不可逆匿名数据。
+格式为 gzip 压缩的 JSONL，保存实际训练的 token IDs、选项位置、题型和监督分布。`original_row` 为原混合数据行号，`src` 对应来源；tokenizer 位于 `models/checkpoint/tokenizer/`，可用于解码文本。
 
 ## 使用
 
 ```bash
 python -m xdecision.data_cache --input data/train/continuation.jsonl.gz --output work/train.pt
-python -m xdecision.train --base models/checkpoint --train work/train.pt --out work/continued --device cpu
+python -m xdecision.train @configs/continue.args
 ```
 
-只加载自己的或经过核验的 PyTorch 缓存。此发布子集改变原混合比例，不能保证复现成品指标。内部留出及同来源校准集不能冒充全新领域测试。
+发布子集的混合比例与完整训练集不同。继续训练后，请用独立领域数据重新评测。
 
 ## 归属与许可
 
@@ -29,4 +29,4 @@ python -m xdecision.train --base models/checkpoint --train work/train.pt --out w
 
 XNLI 的许可依据[作者仓库](https://github.com/facebookresearch/XNLI/blob/main/LICENSE)；WinoGrande 与 OpenBookQA 的 Apache 许可依据 [WinoGrande](https://github.com/allenai/winogrande/blob/master/LICENSE) 和 [OpenBookQA](https://github.com/allenai/OpenBookQA/blob/master/LICENSE)。其它第三方许可依据 manifest 的发布者数据卡。
 
-许可未核实、混合后无法逐条归属、原版权通知尚未完整保存或市场文本再分发条件不明的来源不分发；这不等于断言它们禁止分发。完整数据本地保留。根目录代码许可不覆盖这些第三方限制，也不提供模型可用于任意商业用途的法律保证。
+许可、归属或版权通知待核实的来源暂未收录，原因逐项列于 manifest。使用与再分发须遵循各来源的非商业、署名及相同方式共享等条件。

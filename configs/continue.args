@@ -1,5 +1,9 @@
 --base
 models/checkpoint
+--device
+auto
+--precision
+auto
 --train
 work/train.pt
 --out

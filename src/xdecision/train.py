@@ -1,11 +1,11 @@
-"""Post-train a Laya checkpoint on tokenized decision items (see build.py), on Apple MPS.
+"""Post-train a checkpoint on tokenized decision items using CUDA, MPS or CPU.
 
 Loss per question (all on the model's own option-marker logits):
   * soft cross-entropy against the gold distribution            (what moves accuracy)
   * the official RLCD term: GRPO-style REINFORCE on Gaussian-perturbed logits with a strictly
     proper reward (log + spherical, + RPS for ordinal score)     (kept from laya's recipe)
-  * act head: P(act) is trained to mean "the current answer is right"; the shipped head
-    carries no signal (laya#185)
+  * act head: P(act) is trained to mean "the current answer is right";
+    the existing trained head is preserved by default
 
 Token embeddings are frozen: the 256k-row vocabulary covers 100+ languages and most rows are
 never seen in any fine-tuning batch; letting AdamW touch them only degrades languages the
@@ -23,14 +23,10 @@ import torch
 from laya.common import proper_reward
 
 from .model_io import DEFAULT_BASE, load_model, load_tokenizer, save_checkpoint
+from .devices import (pick_device, pick_precision, autocast_context, synchronize,
+                      memory_stats, device_info)
 
 QTYPE_SCORE = 1
-
-
-def pick_device(name=None):
-    if name:
-        return torch.device(name)
-    return torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
 
 LEN_STEP = 64
@@ -192,7 +188,9 @@ def main():
     ap.add_argument("--sigma-end", type=float, default=0.1)
     ap.add_argument("--save-every", type=int, default=1500, help="optimizer steps between rolling saves")
     ap.add_argument("--bench", type=int, default=0, help="run N micro-batches, report throughput, exit")
-    ap.add_argument("--device", default=None)
+    ap.add_argument("--device", default="auto", help="auto, cuda[:index], mps or cpu")
+    ap.add_argument("--precision", choices=["auto", "fp32", "bf16", "fp16"], default="auto")
+    ap.add_argument("--dry-run", action="store_true", help="Print selected hardware without loading data/model")
     ap.add_argument("--grad-ckpt", action="store_true")
     ap.add_argument("--seed", type=int, default=20260928)
     args = ap.parse_args()
@@ -200,8 +198,29 @@ def main():
     torch.manual_seed(args.seed)
     rng = random.Random(args.seed)
     device = pick_device(args.device)
+    precision = pick_precision(device, args.precision)
+    hardware = device_info(device, precision)
+    print(json.dumps(hardware), flush=True)
+    if args.dry_run:
+        return
+    if args.epochs <= 0 or min(args.accum, args.max_items, args.max_tokens) <= 0:
+        ap.error("epochs, accum, max-items and max-tokens must be positive")
+    if args.bench < 0 or args.save_every < 0:
+        ap.error("bench and save-every must be nonnegative")
+    if min(args.sigma_start, args.sigma_end) <= 0:
+        ap.error("sigma must be positive")
+    if device.type == "cuda":
+        torch.cuda.set_device(device)
+        torch.cuda.reset_peak_memory_stats(device)
     tok = load_tokenizer(args.base)
     model, cfg = load_model(args.base, device)
+    # Every updated checkpoint, including rolling saves, needs fresh calibration.
+    cfg = dict(cfg)
+    cfg["model_name"] = "xDecision"
+    cfg["temperature"] = [1.0, 1.0, 1.0]
+    cfg.pop("temperature_by_options", None)
+    cfg.pop("calibration", None)
+    model.temperature.fill_(1.0)
     if args.reset_act_head:
         reset_act_head(model)
     if args.grad_ckpt:
@@ -209,15 +228,22 @@ def main():
     model.train()
     groups, frozen = param_groups(model, args.lr_enc, args.lr_head, args.wd)
     opt = torch.optim.AdamW(groups, betas=(0.9, 0.98), eps=1e-6)
+    scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda" and precision == "fp16")
     print(f"device={device} frozen_params={frozen/1e6:.1f}M "
           f"trainable={sum(p.numel() for p in model.parameters() if p.requires_grad)/1e6:.1f}M", flush=True)
 
-    items = torch.load(args.train, weights_only=False)
+    items = torch.load(args.train, map_location="cpu", weights_only=True)
+    if not items:
+        raise ValueError("Training data is empty")
     print(f"train items: {len(items)}", flush=True)
 
     ep_batches = token_batches(items, args.max_tokens, args.max_items, rng)
     total_micro = int(len(ep_batches) * args.epochs)
-    total_steps = max(1, total_micro // args.accum)
+    if args.bench:
+        total_micro = min(total_micro, args.bench)
+    if total_micro < 1:
+        raise ValueError("This epoch fraction contains no micro-batches")
+    total_steps = math.ceil(total_micro / args.accum)
     warm = max(1, int(total_steps * args.warmup))
     base_lrs = [g["lr"] for g in opt.param_groups]
 
@@ -229,6 +255,7 @@ def main():
 
     os.makedirs(args.out, exist_ok=True)
     log = open(os.path.join(args.out, "train_log.jsonl"), "a")
+    synchronize(device)
     t0 = time.time()
     micro, step, seen, tokens = 0, 0, 0, 0
     agg = {"ce": 0.0, "rl": 0.0, "act": 0.0, "acc": 0.0, "n": 0}
@@ -244,31 +271,46 @@ def main():
         idx = batches[bi]
         bi += 1
         b = collate([items[i] for i in idx], tok.pad_token_id)
-        b = {k: v.to(device) for k, v in b.items()}
+        b = {k: (v.pin_memory().to(device, non_blocking=True) if device.type == "cuda" else v.to(device))
+             for k, v in b.items()}
         progress = micro / max(1, total_micro)
         sigma = args.sigma_start + (args.sigma_end - args.sigma_start) * progress
-        with torch.autocast(device.type, dtype=torch.bfloat16, enabled=device.type in ("mps", "cuda")):
+        with autocast_context(device, precision):
             logits, act_logits = forward(model, b)
         loss, parts = loss_fn(logits, act_logits, b, sigma)
-        (loss / args.accum).backward()
+        if not torch.isfinite(loss).item():
+            raise FloatingPointError("Non-finite training loss; no automatic device/precision fallback")
+        window_start = (micro // args.accum) * args.accum
+        window_size = min(args.accum, total_micro - window_start)
+        scaler.scale(loss / window_size).backward()
         micro += 1
         seen += len(idx)
         tokens += int(b["attention_mask"].sum())
         for k in ("ce", "rl", "act", "acc"):
             agg[k] += parts[k]
         agg["n"] += 1
-        if micro % args.accum == 0:
+        if micro % args.accum == 0 or micro == total_micro:
             set_lr(step)
-            torch.nn.utils.clip_grad_norm_([p for g in opt.param_groups for p in g["params"]], 1.0)
-            opt.step()
+            scaler.unscale_(opt)
+            torch.nn.utils.clip_grad_norm_([p for g in opt.param_groups for p in g["params"]], 1.0,
+                                          error_if_nonfinite=not scaler.is_enabled())
+            scale_before = scaler.get_scale()
+            scaler.step(opt)
+            scaler.update()
             opt.zero_grad(set_to_none=True)
+            if scaler.get_scale() < scale_before:
+                print(json.dumps({"micro": micro, "skipped_nonfinite_gradient": True,
+                                  "gradient_scale": scaler.get_scale()}), flush=True)
+                continue
             step += 1
             if step % 25 == 0 or args.bench:
+                synchronize(device)
                 el = time.time() - t0
                 rec = {"step": step, "of": total_steps, "epoch": round(micro / len(ep_batches), 3),
                        "items_s": round(seen / el, 2), "tok_s": round(tokens / el),
                        "eta_h": round((total_micro - micro) * (el / micro) / 3600, 2),
                        "lr_enc": opt.param_groups[0]["lr"], "sigma": round(sigma, 3),
+                       **hardware, "memory": memory_stats(device),
                        **{k: round(agg[k] / agg["n"], 4) for k in ("ce", "rl", "act", "acc")}}
                 print(json.dumps(rec), flush=True)
                 log.write(json.dumps(rec) + "\n")
@@ -277,21 +319,20 @@ def main():
             if args.save_every and step % args.save_every == 0 and not args.bench:
                 save_checkpoint(model, cfg, args.base, os.path.join(args.out, "rolling"),
                                 meta={"step": step, "of": total_steps})
-        if args.bench and micro >= args.bench:
-            el = time.time() - t0
-            print(f"BENCH micro={micro} items/s={seen/el:.2f} tok/s={tokens/el:.0f} "
-                  f"mem={torch.mps.driver_allocated_memory()/2**30 if device.type=='mps' else 0:.1f}GB "
-                  f"full-epoch-h={len(ep_batches)*el/micro/3600:.2f}", flush=True)
-            return
-    cfg = dict(cfg)
-    cfg["model_name"] = "xDecision"
-    cfg["temperature"] = [1.0, 1.0, 1.0]
-    cfg.pop("temperature_by_options", None)
-    cfg.pop("calibration", None)
-    model.temperature.fill_(1.0)
+    log.close()
+    if step == 0:
+        raise FloatingPointError("No optimizer update succeeded; checkpoint not saved")
+    synchronize(device)
+    if args.bench:
+        el = time.time() - t0
+        print(f"BENCH micro={micro} optimizer_steps={step} items/s={seen/el:.2f} tok/s={tokens/el:.0f} "
+              f"memory={json.dumps(memory_stats(device))} "
+              f"full-epoch-h={len(ep_batches)*el/micro/3600:.2f}", flush=True)
+        return
     cfg.setdefault("posttrain", {})
     cfg["posttrain"] = {"steps": step, "micro_batches": micro, "items_seen": seen,
-                        "hours": round((time.time() - t0) / 3600, 2), "base_model": "xDecision"}
+                        "hours": round((time.time() - t0) / 3600, 2), "base_model": "xDecision",
+                        "hardware": hardware}
     save_checkpoint(model, cfg, args.base, os.path.join(args.out, "final"),
                     meta={"step": step, "of": total_steps, "done": True})
     print("DONE", json.dumps(cfg["posttrain"]), flush=True)

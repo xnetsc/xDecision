@@ -20,6 +20,7 @@ from laya.common import QTYPE_NAMES, clamp_temperature, ece_score, temp_bucket
 
 from .model_io import load_config, load_model, load_tokenizer
 from .train import collate
+from .devices import pick_device
 
 SUITES = ["typed_decisions", "emotion", "sst5", "prompt_injection", "xcopa", "xwinograd", "belebele", "xstory",
           "wd_heldout", "wiki_heldout", "hans_formats", "unseen_workflows", "market_heldout", "uncertainty", "fitness_unseen",
@@ -192,12 +193,13 @@ def main():
     ap.add_argument("--suites", default=",".join(SUITES + ["val"]))
     ap.add_argument("--calibrate", action="store_true")
     ap.add_argument("--calib-file", default="calib.pt")
-    ap.add_argument("--device", default="mps")
+    ap.add_argument("--device", default="auto", help="auto, cuda[:index], mps or cpu; evaluation remains FP32")
     ap.add_argument("--out", default=None)
     ap.add_argument("--max-per-suite", type=int, default=0)
     ap.add_argument("--threads", type=int, default=0)
     args = ap.parse_args()
-    device = torch.device(args.device)
+    device = pick_device(args.device)
+    print(f"device={device} precision=fp32", flush=True)
     if args.threads:
         torch.set_num_threads(args.threads)
     tok = load_tokenizer(args.ckpt)
@@ -214,7 +216,8 @@ def main():
         json.dump(cfg, open(os.path.join(args.ckpt, "rl_agent_config.json"), "w"), indent=2, ensure_ascii=False)
         print(f"calibrated in {time.time()-t0:.0f}s: temperature={t} by_options={tb}", flush=True)
     t, tb = temps_from_cfg(cfg)
-    report = {"ckpt": os.path.abspath(args.ckpt), "temperature": t, "temperature_by_options": tb, "suites": {},
+    report = {"ckpt": os.path.abspath(args.ckpt), "device": str(device), "precision": "fp32",
+              "temperature": t, "temperature_by_options": tb, "suites": {},
               "suites_as_shipped": {}}
     for name in args.suites.split(","):
         path = os.path.join(args.data, f"{name}.pt" if name == "val" else f"eval_{name}.pt")
