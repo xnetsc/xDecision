@@ -1,5 +1,8 @@
 ---
 license: apache-2.0
+language:
+  - multilingual
+pipeline_tag: text-classification
 base_model:
   - convaiinnovations/laya-multilingual
   - jhu-clsp/mmBERT-base
@@ -13,6 +16,12 @@ tags:
 
 # xDecision
 
+[中文](#中文) | [English](#english)
+
+## 中文
+
+[Switch to English](#english)
+
 约 322M 参数的多语结构化决策模型，基于 [Laya Multilingual](https://huggingface.co/convaiinnovations/laya-multilingual) 后训练，使用 [mmBERT-base](https://huggingface.co/jhu-clsp/mmBERT-base) 编码器。
 
 - `choice`：在候选项中选择。
@@ -21,6 +30,10 @@ tags:
 - 输出选项概率及 act/escalate 执行建议。
 
 提供原始 checkpoint、F16/Q8_0 GGUF、可分发训练数据和续训代码，支持 CUDA、Apple MPS、CPU。
+
+### 适用场景
+
+面向有明确上下文和候选项的分类、工作流路由、命题判断及有序评分。输入为事实上下文和结构化问题，输出为候选概率与执行建议。部署前应在目标领域校准并验证，证据不足或高风险决策保留人工复核。
 
 ## 快速开始
 
@@ -148,3 +161,151 @@ Apple Silicon 另提供 MLX 入口：安装 `pip install -e '.[apple]'` 后运�
 ## 许可
 
 代码和模型采用 Apache-2.0，上游 mmBERT-base 保留 MIT 许可及归属。见 `LICENSE`、`NOTICE`、`THIRD_PARTY_LICENSES`。数据分别适用来源许可，其中部分限非商业用途。
+
+---
+
+## English
+
+[切换到中文](#中文)
+
+xDecision is a multilingual structured decision model with approximately 322M parameters, post-trained from [Laya Multilingual](https://huggingface.co/convaiinnovations/laya-multilingual) with an [mmBERT-base](https://huggingface.co/jhu-clsp/mmBERT-base) encoder.
+
+- `choice`: select among candidates.
+- `noul`: assess whether a statement is true or false.
+- `score`: assign a score on an ordered scale.
+- Returns candidate probabilities and an act/escalate recommendation.
+
+The release includes the original checkpoint, F16/Q8_0 GGUF files, redistributable training data, and continued-training code for CUDA, Apple MPS, and CPU.
+
+### Intended use
+
+Classification, workflow routing, statement assessment, and ordered scoring with explicit context and candidates. Inputs are factual context and structured questions; outputs are candidate probabilities and action recommendations. Calibrate and validate on the target domain before deployment, with human review for insufficient evidence or high-risk decisions.
+
+### Quick start
+
+```bash
+git clone https://github.com/xnetsc/xDecision.git
+cd xDecision
+git lfs pull
+python -m pip install -e .
+```
+
+For NVIDIA hardware, first install a driver-compatible CUDA build from the [PyTorch installation guide](https://pytorch.org/get-started/locally/).
+
+```python
+import xdecision
+
+with xdecision.load("models/gguf/xDecision-F16.gguf", device="cpu") as model:
+    result = model.predict(
+        "The delivery arrived yesterday.",
+        {"status": {"type": "choice", "instructions": "Select the delivery status.",
+                    "criteria": {"arrived": "Delivered", "pending": "Not yet delivered"}}},
+    )
+    print(result)
+```
+
+The input limit is 1,024 tokens, with a 256-token budget for the question and candidates. `probabilities` contains candidate probabilities; `action.act_probability` is the action-head output. `answer_confidence` and the compatibility field `confidence` retain their upstream definitions and should be interpreted separately.
+
+### Training improvements
+
+- Mixed multilingual inference, reading comprehension, commonsense, and knowledge training, including entity–attribute binding, counterfactuals, and negation.
+- Fact-order and candidate-order variations, paraphrases, and all three question types.
+- Insufficient-evidence examples, grouped consistency and uncertainty objectives, and act/escalate-head training.
+- Frozen multilingual token embeddings, general-task replay, and temperature fitting by question type and candidate count.
+
+### Evaluation
+
+Accuracy measured with the same local evaluator is shown below. Full results are in [evaluation/metrics.json](evaluation/metrics.json). The overall Typed set includes workflow types covered during training; unseen workflows are reported separately. Basic probes are a development regression set.
+
+| Dataset / slice | Items | Laya Multilingual | xDecision |
+|---|---:|---:|---:|
+| Typed decisions | 2,000 | 35.20% | 58.75% |
+| Unseen workflow: agent_trace_observability | 500 | 28.60% | 34.40% |
+| Internal validation set | 3,599 | 48.85% | 70.41% |
+| Emotion | 1,000 | 54.50% | 56.60% |
+| SST-5 | 2,210 | 27.29% | 44.84% |
+| XCOPA | 1,100 | 57.64% | 59.09% |
+| XWinograd | 4,442 | 52.16% | 62.94% |
+| Belebele subset | 2,091 | 33.72% | 55.38% |
+| XStory | 1,649 | 57.19% | 70.95% |
+| Wikidata-derived holdout | 3,377 | 48.47% | 90.94% |
+| Wikipedia-derived holdout | 1,500 | 60.73% | 91.47% |
+| Prompt-injection slice | 116 | 64.66% | 67.24% |
+
+Performance setup: Apple M5, CPU FP32, four threads, short choice requests, two warm-up calls and 20 timed calls. Timings use the original checkpoint; peak RSS covers model loading and the full probe suite.
+
+| Metric | xDecision |
+|---|---:|
+| Basic targeted probes | 28/29 |
+| Relative-suitability probes | 7/16 |
+| Median / P95 latency | 24.52 / 24.91 ms |
+| Model loading time | 1.81 s |
+| Peak process RSS | 3.47 GB |
+
+Dequantized Q8_0 was re-evaluated on 15 suites, with a maximum accuracy drop of **0.45 percentage points**. See [quantization validation](evaluation/validation.json).
+
+### Known limitations
+
+- **Relative suitability and order stability:** both GitHub and Hugging Face can host code, but ranking which is more suitable still produces errors. Some evidence-based scoring answers flip when fact order changes, and the same proposition can yield different results across question types.
+- **Unseen domains and high-confidence errors:** unseen-workflow accuracy is 34.40%. Typed ECE is 0.1236 and act AUROC is 0.6583; unseen-workflow act AUROC is 0.4926. High-risk uses require independent validation and human review.
+- **GGUF execution:** this repository's loader restores the custom `xdecision` architecture for PyTorch inference. Q8_0 reduces storage and is dequantized at runtime. llama.cpp and Ollama are not currently supported.
+
+### Files
+
+```text
+models/checkpoint/  Original weights, encoder config, tokenizer, inference config
+models/gguf/        xDecision-F16.gguf, xDecision-Q8_0.gguf
+data/              Training, calibration, test data, and source manifest
+configs/           Continued-training parameters and data mixture
+src/xdecision/     Inference, training, calibration, evaluation, and export
+tests/             Code tests
+examples/          Minimal examples
+evaluation/        Metrics and quantization validation
+```
+
+F16 is **704.10 MB**, includes all 170 tensors and the tokenizer, and restores the original checkpoint losslessly. Q8_0 is **402.55 MB**, with 101 matrices quantized. File hashes are listed in `checksums.sha256`.
+
+Data is distributed according to source licenses: **49,801 of 139,680 rows** from the final training stage and all **36,000 rows** of the six-view equivalence groups are included. Per-stage counts and omissions are listed in [data/manifest.json](data/manifest.json); usage terms are in the [data documentation](data/README.md).
+
+### Continue training
+
+Load existing weights from `models/checkpoint` with a newly initialized optimizer. The act head is retained by default; recalibrate temperatures after training.
+
+```bash
+python -m xdecision.data_cache --input data/train/continuation.jsonl.gz --output work/train.pt
+python -m xdecision.train --dry-run
+python -m xdecision.train @configs/continue.args
+```
+
+Custom JSONL records use `state`, `question`, and `target`; see `examples/train.jsonl`. Targets follow candidate order and sum to one; noul uses false/true order. Split training, calibration, and test data by domain, entity, or scenario first.
+
+```bash
+python -m xdecision.prepare --input your-train.jsonl --checkpoint models/checkpoint --output work/custom.pt
+python -m xdecision.train @configs/continue.args --train work/custom.pt
+python -m xdecision.prepare --input your-calibration.jsonl --checkpoint work/continued/final --output work/eval/calib.pt
+python -m xdecision.prepare --input your-test.jsonl --checkpoint work/continued/final --output work/eval/val.pt
+python -m xdecision.evaluate --ckpt work/continued/final --data work/eval --calibrate --suites val
+python -m xdecision.gguf_io export --checkpoint work/continued/final --output work/xDecision-F16.gguf --quantization F16
+python -m xdecision.gguf_io verify --checkpoint work/continued/final --gguf work/xDecision-F16.gguf
+```
+
+### Device selection
+
+Automatic priority is **CUDA → MPS → CPU**. With multiple CUDA GPUs, the device with the most free memory at startup is selected. Use `CUDA_VISIBLE_DEVICES` to limit eligible devices or `--device cuda:0` to select one explicitly. Evaluation and calibration use FP32.
+
+| Training device | Automatic precision |
+|---|---|
+| CUDA GPU with native BF16 support | BF16 |
+| Other CUDA GPUs | FP16 + GradScaler |
+| Apple MPS on macOS 14+ | BF16 |
+| Older MPS / CPU | FP32 |
+
+Override precision with `--precision fp32`. To reduce memory usage, lower `--max-tokens` / `--max-items` and enable `--grad-ckpt`; use `--accum` to increase the effective batch size. Logs report device, precision, and memory usage. Training steps were verified on CPU/MPS. CUDA selection branches passed tests; validation on physical NVIDIA hardware remains pending.
+
+Apple Silicon also has an MLX entry point: install with `pip install -e '.[apple]'`, then run `python -m xdecision.mlx_train`. PyTorch uses soft CE, RLCD, and act losses. MLX additionally supports `--equiv`, `--w-consistency`, `--w-uncertain`, `--w-overconf`, and `--w-selective`; select the training recipe through its explicit entry point.
+
+### License
+
+Code and model are released under Apache-2.0, with the upstream mmBERT-base MIT license and attribution preserved. See `LICENSE`, `NOTICE`, and `THIRD_PARTY_LICENSES`. Datasets retain their individual source licenses, including non-commercial restrictions on some sources.
+
+[中文](#中文) | [English](#english)
