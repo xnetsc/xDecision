@@ -1,0 +1,657 @@
+{
+  "schema_version": 1,
+  "format": "tokenized JSONL, gzip; preserves token IDs, markers, targets and row order of included records",
+  "warning": "Partial redistribution, not the complete original mixture. Missing sources are never silently replaced. Noncommercial/share-alike conditions apply per row source.",
+  "sources": {
+    "mnli": {
+      "redistributed": false,
+      "attribution": "nyu-mll/multi_nli",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "xnli": {
+      "redistributed": true,
+      "attribution": "facebook/xnli",
+      "source_url": "https://huggingface.co/datasets/facebook/xnli",
+      "license": "CC-BY-NC-4.0"
+    },
+    "anli": {
+      "redistributed": true,
+      "attribution": "facebook/anli",
+      "source_url": "https://huggingface.co/datasets/facebook/anli",
+      "license": "CC-BY-NC-4.0"
+    },
+    "race": {
+      "redistributed": false,
+      "attribution": "ehovy/race",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "c3": {
+      "redistributed": false,
+      "attribution": "clue/clue",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "boolq": {
+      "redistributed": true,
+      "attribution": "google/boolq",
+      "source_url": "https://huggingface.co/datasets/google/boolq",
+      "license": "CC-BY-SA-3.0"
+    },
+    "sciq_support": {
+      "redistributed": true,
+      "attribution": "allenai/sciq",
+      "source_url": "https://huggingface.co/datasets/allenai/sciq",
+      "license": "CC-BY-NC-3.0"
+    },
+    "sciq": {
+      "redistributed": true,
+      "attribution": "allenai/sciq",
+      "source_url": "https://huggingface.co/datasets/allenai/sciq",
+      "license": "CC-BY-NC-3.0"
+    },
+    "qasc_facts": {
+      "redistributed": true,
+      "attribution": "allenai/qasc",
+      "source_url": "https://huggingface.co/datasets/allenai/qasc",
+      "license": "CC-BY-4.0"
+    },
+    "qasc": {
+      "redistributed": true,
+      "attribution": "allenai/qasc",
+      "source_url": "https://huggingface.co/datasets/allenai/qasc",
+      "license": "CC-BY-4.0"
+    },
+    "openbookqa": {
+      "redistributed": true,
+      "attribution": "allenai/openbookqa",
+      "source_url": "https://huggingface.co/datasets/allenai/openbookqa",
+      "license": "Apache-2.0"
+    },
+    "openbookqa_fact": {
+      "redistributed": true,
+      "attribution": "allenai/openbookqa",
+      "source_url": "https://huggingface.co/datasets/allenai/openbookqa",
+      "license": "Apache-2.0"
+    },
+    "commonsense_qa": {
+      "redistributed": false,
+      "attribution": "tau/commonsense_qa",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "arc": {
+      "redistributed": true,
+      "attribution": "allenai/ai2_arc",
+      "source_url": "https://huggingface.co/datasets/allenai/ai2_arc",
+      "license": "CC-BY-SA-4.0"
+    },
+    "hellaswag": {
+      "redistributed": false,
+      "attribution": "Rowan/hellaswag",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "winogrande": {
+      "redistributed": true,
+      "attribution": "allenai/winogrande",
+      "source_url": "https://huggingface.co/datasets/allenai/winogrande",
+      "license": "Apache-2.0"
+    },
+    "piqa": {
+      "redistributed": false,
+      "attribution": "baber/piqa",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "mmlu": {
+      "redistributed": false,
+      "attribution": "cais/mmlu",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "mmmlu": {
+      "redistributed": false,
+      "attribution": "openai/MMMLU",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "ag_news": {
+      "redistributed": false,
+      "attribution": "fancyzhx/ag_news",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "tnews": {
+      "redistributed": false,
+      "attribution": "clue/clue",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "amazon_stars": {
+      "redistributed": false,
+      "attribution": "mteb/amazon_reviews_multi",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "wd_knowledge": {
+      "redistributed": true,
+      "attribution": "Wikidata contributors; xDecision task transformations",
+      "source_url": "https://www.wikidata.org/wiki/Wikidata:Licensing",
+      "license": "CC0-1.0"
+    },
+    "wd_binding_counterfactual": {
+      "redistributed": true,
+      "attribution": "Wikidata contributors; xDecision task transformations",
+      "source_url": "https://www.wikidata.org/wiki/Wikidata:Licensing",
+      "license": "CC0-1.0"
+    },
+    "wd_binding_fictional": {
+      "redistributed": true,
+      "attribution": "Wikidata contributors; xDecision task transformations",
+      "source_url": "https://www.wikidata.org/wiki/Wikidata:Licensing",
+      "license": "CC0-1.0"
+    },
+    "wd_binding_fictional_unanswerable": {
+      "redistributed": true,
+      "attribution": "Wikidata contributors; xDecision task transformations",
+      "source_url": "https://www.wikidata.org/wiki/Wikidata:Licensing",
+      "license": "CC0-1.0"
+    },
+    "wd_binding_consistent": {
+      "redistributed": true,
+      "attribution": "Wikidata contributors; xDecision task transformations",
+      "source_url": "https://www.wikidata.org/wiki/Wikidata:Licensing",
+      "license": "CC0-1.0"
+    },
+    "ui_labels": {
+      "redistributed": true,
+      "attribution": "Wikidata contributors; xDecision task transformations",
+      "source_url": "https://www.wikidata.org/wiki/Wikidata:Licensing",
+      "license": "CC0-1.0"
+    },
+    "wiki_statement": {
+      "redistributed": false,
+      "attribution": "Wikipedia contributors",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "wiki_role_to_name": {
+      "redistributed": false,
+      "attribution": "Wikipedia contributors",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "negation": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "structured_bool": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "structured_threshold": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "wiki_name_to_role": {
+      "redistributed": false,
+      "attribution": "Wikipedia contributors",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "structured_compare": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "wiki_identify": {
+      "redistributed": false,
+      "attribution": "Wikipedia contributors",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "structured_absent": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "structured_bucket": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "typed_decisions_train": {
+      "redistributed": true,
+      "attribution": "LocalLLaMA/typed-decisions",
+      "source_url": "https://huggingface.co/datasets/LocalLLaMA/typed-decisions",
+      "license": "Apache-2.0"
+    },
+    "structured_lookup": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "structured_pick": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "echo": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "injection": {
+      "redistributed": false,
+      "attribution": "xTRam1/safe-guard-prompt-injection + jackhhao/jailbreak-classification + Lakera/gandalf_ignore_instructions",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "hans": {
+      "redistributed": false,
+      "attribution": "tommccoy1/hans",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "intent_desc": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "nli_grouped": {
+      "redistributed": false,
+      "attribution": "stanfordnlp/snli + nyu-mll/multi_nli + facebook/xnli",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "workflow_supervision": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "market_supervision": {
+      "redistributed": false,
+      "attribution": "market snapshots and task labels",
+      "reason": "Redistribution permission, original notices, or row-level attribution not fully verified; obtain from the original provider."
+    },
+    "equivalent_fact": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    }
+  },
+  "splits": {
+    "train/foundation.jsonl.gz": {
+      "original_rows": 367112,
+      "included_rows": 200057,
+      "included_sources": {
+        "xnli": 25872,
+        "anli": 17640,
+        "boolq": 9239,
+        "sciq_support": 5038,
+        "sciq": 6376,
+        "qasc_facts": 3973,
+        "qasc": 3999,
+        "openbookqa": 2452,
+        "openbookqa_fact": 2403,
+        "arc": 3303,
+        "winogrande": 19600,
+        "wd_knowledge": 39400,
+        "wd_binding_counterfactual": 12072,
+        "wd_binding_fictional": 18802,
+        "wd_binding_fictional_unanswerable": 3344,
+        "wd_binding_consistent": 14784,
+        "ui_labels": 11760
+      },
+      "omitted_sources": {
+        "mnli": 19208,
+        "race": 19590,
+        "c3": 11627,
+        "commonsense_qa": 9427,
+        "hellaswag": 19600,
+        "piqa": 15680,
+        "mmlu": 13753,
+        "mmmlu": 19362,
+        "ag_news": 7448,
+        "tnews": 7840,
+        "amazon_stars": 23520
+      },
+      "sha256": "69a0b6c3b9cdc44efb1eb69df11a48ea4b3014477f8e4c8c4c39219bd96e074d"
+    },
+    "train/knowledge.jsonl.gz": {
+      "original_rows": 144465,
+      "included_rows": 73163,
+      "included_sources": {
+        "negation": 7840,
+        "xnli": 4334,
+        "wd_binding_fictional": 3002,
+        "structured_bool": 4724,
+        "winogrande": 3171,
+        "structured_threshold": 4567,
+        "structured_compare": 4297,
+        "anli": 2941,
+        "structured_absent": 4756,
+        "qasc": 632,
+        "wd_knowledge": 6528,
+        "openbookqa_fact": 376,
+        "structured_bucket": 2145,
+        "qasc_facts": 658,
+        "boolq": 1568,
+        "typed_decisions_train": 9000,
+        "ui_labels": 1914,
+        "sciq_support": 779,
+        "wd_binding_fictional_unanswerable": 546,
+        "wd_binding_consistent": 2383,
+        "sciq": 1030,
+        "structured_lookup": 2346,
+        "openbookqa": 407,
+        "wd_binding_counterfactual": 2038,
+        "structured_pick": 688,
+        "arc": 493
+      },
+      "omitted_sources": {
+        "c3": 1919,
+        "wiki_statement": 6184,
+        "wiki_role_to_name": 17417,
+        "amazon_stars": 3829,
+        "wiki_name_to_role": 2297,
+        "wiki_identify": 18204,
+        "mmmlu": 3134,
+        "hellaswag": 3184,
+        "race": 3166,
+        "tnews": 1289,
+        "ag_news": 1217,
+        "mnli": 3208,
+        "piqa": 2483,
+        "commonsense_qa": 1491,
+        "mmlu": 2280
+      },
+      "sha256": "f8958dbb3413a7f8facbcc950cc137a0f71109c9fb8f0a0c184904abec4b3285"
+    },
+    "train/robustness.jsonl.gz": {
+      "original_rows": 61800,
+      "included_rows": 33103,
+      "included_sources": {
+        "negation": 5213,
+        "wd_knowledge": 1878,
+        "echo": 9000,
+        "xnli": 1252,
+        "structured_absent": 1403,
+        "wd_binding_fictional": 868,
+        "qasc_facts": 195,
+        "wd_binding_counterfactual": 587,
+        "winogrande": 920,
+        "structured_threshold": 1324,
+        "typed_decisions_train": 2548,
+        "openbookqa_fact": 113,
+        "structured_compare": 1289,
+        "structured_bool": 1359,
+        "structured_bucket": 625,
+        "sciq_support": 234,
+        "openbookqa": 104,
+        "sciq": 289,
+        "structured_lookup": 728,
+        "boolq": 438,
+        "wd_binding_fictional_unanswerable": 156,
+        "qasc": 184,
+        "ui_labels": 534,
+        "wd_binding_consistent": 687,
+        "anli": 853,
+        "structured_pick": 194,
+        "arc": 128
+      },
+      "omitted_sources": {
+        "amazon_stars": 1052,
+        "wiki_role_to_name": 5090,
+        "wiki_identify": 5337,
+        "injection": 7800,
+        "wiki_name_to_role": 706,
+        "race": 946,
+        "hellaswag": 935,
+        "mmmlu": 921,
+        "mmlu": 661,
+        "piqa": 765,
+        "tnews": 387,
+        "wiki_statement": 1796,
+        "c3": 523,
+        "mnli": 999,
+        "commonsense_qa": 427,
+        "ag_news": 352
+      },
+      "sha256": "13467ba4846669f7eb885fc71bcf93c23295a449522b430c3d5931e7445bfdcd"
+    },
+    "train/workflows.jsonl.gz": {
+      "original_rows": 183783,
+      "included_rows": 69949,
+      "included_sources": {
+        "intent_desc": 8000,
+        "wd_binding_fictional": 3157,
+        "anli": 2901,
+        "workflow_supervision": 9760,
+        "xnli": 4230,
+        "wd_knowledge": 6326,
+        "ui_labels": 1944,
+        "wd_binding_counterfactual": 1891,
+        "winogrande": 3121,
+        "echo": 5280,
+        "openbookqa_fact": 392,
+        "openbookqa": 409,
+        "negation": 2790,
+        "boolq": 1493,
+        "wd_binding_consistent": 2402,
+        "wd_binding_fictional_unanswerable": 556,
+        "structured_absent": 1665,
+        "structured_bucket": 784,
+        "typed_decisions_train": 3183,
+        "structured_compare": 1528,
+        "structured_bool": 1725,
+        "qasc": 648,
+        "sciq": 1094,
+        "structured_pick": 210,
+        "sciq_support": 821,
+        "qasc_facts": 666,
+        "structured_threshold": 1610,
+        "arc": 539,
+        "structured_lookup": 824
+      },
+      "omitted_sources": {
+        "hans": 20000,
+        "nli_grouped": 30000,
+        "wiki_statement": 7693,
+        "injection": 4720,
+        "amazon_stars": 3785,
+        "wiki_identify": 6507,
+        "race": 3255,
+        "mnli": 3181,
+        "wiki_role_to_name": 6150,
+        "tnews": 1266,
+        "market_supervision": 10520,
+        "c3": 1911,
+        "hellaswag": 3151,
+        "wiki_name_to_role": 834,
+        "mmmlu": 3190,
+        "piqa": 2557,
+        "mmlu": 2265,
+        "ag_news": 1290,
+        "commonsense_qa": 1559
+      },
+      "sha256": "046a50bfcb2f8ed5b9a76c53409c0b9dbc8d1f4d49d522f15d740ab363dc7519"
+    },
+    "train/continuation.jsonl.gz": {
+      "original_rows": 139680,
+      "included_rows": 49801,
+      "included_sources": {
+        "wd_binding_fictional": 1814,
+        "boolq": 806,
+        "workflow_supervision": 9760,
+        "wd_binding_counterfactual": 1089,
+        "echo": 6783,
+        "structured_threshold": 891,
+        "wd_knowledge": 3593,
+        "typed_decisions_train": 1774,
+        "structured_bucket": 437,
+        "ui_labels": 1085,
+        "wd_binding_consistent": 1356,
+        "intent_desc": 4514,
+        "structured_lookup": 462,
+        "anli": 1628,
+        "structured_compare": 853,
+        "negation": 3800,
+        "structured_bool": 1004,
+        "arc": 299,
+        "structured_absent": 962,
+        "sciq": 620,
+        "xnli": 2408,
+        "openbookqa": 234,
+        "winogrande": 1801,
+        "qasc": 354,
+        "sciq_support": 431,
+        "qasc_facts": 356,
+        "wd_binding_fictional_unanswerable": 327,
+        "openbookqa_fact": 236,
+        "structured_pick": 124
+      },
+      "omitted_sources": {
+        "injection": 23400,
+        "mmmlu": 1847,
+        "race": 1839,
+        "nli_grouped": 17047,
+        "hans": 11361,
+        "wiki_identify": 3606,
+        "piqa": 1465,
+        "amazon_stars": 2151,
+        "market_supervision": 10520,
+        "hellaswag": 1758,
+        "wiki_statement": 4440,
+        "mmlu": 1272,
+        "tnews": 731,
+        "c3": 1060,
+        "wiki_role_to_name": 3481,
+        "ag_news": 741,
+        "mnli": 1824,
+        "wiki_name_to_role": 464,
+        "commonsense_qa": 872
+      },
+      "sha256": "a247f8d61a975d3a016027de569339b00b3e42cc004376dfb4e655aedb13be7f"
+    },
+    "train/equivalence.jsonl.gz": {
+      "original_rows": 36000,
+      "included_rows": 36000,
+      "included_sources": {
+        "equivalent_fact": 36000
+      },
+      "omitted_sources": {},
+      "sha256": "52672da8c9417b2bb85821d214b399f1ca2cf1599c7cd0e040f78ee45d054a7b"
+    },
+    "calibration/initial.jsonl.gz": {
+      "original_rows": 3641,
+      "included_rows": 1937,
+      "included_sources": {
+        "xnli": 264,
+        "anli": 180,
+        "boolq": 94,
+        "sciq_support": 51,
+        "sciq": 65,
+        "qasc_facts": 41,
+        "qasc": 40,
+        "openbookqa": 25,
+        "openbookqa_fact": 25,
+        "arc": 33,
+        "winogrande": 200,
+        "wd_knowledge": 300,
+        "wd_binding_counterfactual": 123,
+        "wd_binding_fictional": 198,
+        "wd_binding_fictional_unanswerable": 27,
+        "wd_binding_consistent": 151,
+        "ui_labels": 120
+      },
+      "omitted_sources": {
+        "mnli": 196,
+        "race": 200,
+        "c3": 118,
+        "commonsense_qa": 96,
+        "hellaswag": 200,
+        "piqa": 160,
+        "mmlu": 140,
+        "mmmlu": 198,
+        "ag_news": 76,
+        "tnews": 80,
+        "amazon_stars": 240
+      },
+      "sha256": "73137ff7a485e94f0667852c80a44575967a49a4d7c202b836cb1f12a043e4b4"
+    },
+    "calibration/current.jsonl.gz": {
+      "original_rows": 5176,
+      "included_rows": 2574,
+      "included_sources": {
+        "xnli": 264,
+        "anli": 180,
+        "boolq": 94,
+        "sciq_support": 51,
+        "sciq": 65,
+        "qasc_facts": 41,
+        "qasc": 40,
+        "openbookqa": 25,
+        "openbookqa_fact": 25,
+        "arc": 33,
+        "winogrande": 200,
+        "wd_knowledge": 300,
+        "wd_binding_counterfactual": 123,
+        "wd_binding_fictional": 198,
+        "wd_binding_fictional_unanswerable": 27,
+        "wd_binding_consistent": 151,
+        "ui_labels": 120,
+        "structured_absent": 97,
+        "structured_bool": 96,
+        "structured_lookup": 47,
+        "structured_threshold": 93,
+        "structured_pick": 14,
+        "structured_compare": 87,
+        "structured_bucket": 43,
+        "negation": 160
+      },
+      "omitted_sources": {
+        "mnli": 196,
+        "race": 200,
+        "c3": 118,
+        "commonsense_qa": 96,
+        "hellaswag": 200,
+        "piqa": 160,
+        "mmlu": 140,
+        "mmmlu": 198,
+        "ag_news": 76,
+        "tnews": 80,
+        "amazon_stars": 240,
+        "wiki_identify": 371,
+        "wiki_role_to_name": 355,
+        "wiki_statement": 126,
+        "wiki_name_to_role": 46
+      },
+      "sha256": "b65c71f220e1fa771ead4d66cafa1fa3bc0f8056e57329d31ea09af095783bfa"
+    },
+    "test/internal.jsonl.gz": {
+      "original_rows": 3640,
+      "included_rows": 1937,
+      "included_sources": {
+        "xnli": 264,
+        "anli": 180,
+        "boolq": 94,
+        "sciq_support": 51,
+        "sciq": 65,
+        "qasc_facts": 40,
+        "qasc": 41,
+        "openbookqa": 25,
+        "openbookqa_fact": 24,
+        "arc": 34,
+        "winogrande": 200,
+        "wd_knowledge": 300,
+        "wd_binding_counterfactual": 123,
+        "wd_binding_fictional": 185,
+        "wd_binding_fictional_unanswerable": 41,
+        "wd_binding_consistent": 150,
+        "ui_labels": 120
+      },
+      "omitted_sources": {
+        "mnli": 196,
+        "race": 199,
+        "c3": 119,
+        "commonsense_qa": 96,
+        "hellaswag": 200,
+        "piqa": 160,
+        "mmlu": 140,
+        "mmmlu": 197,
+        "ag_news": 76,
+        "tnews": 80,
+        "amazon_stars": 240
+      },
+      "sha256": "b3bf2a2f530edf28ffaf5868534d5fb84d6314d0c12a48c7c67431902823f9a7"
+    }
+  }
+}

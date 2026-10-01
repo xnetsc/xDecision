@@ -1,0 +1,7 @@
+xDecision
+
+This product contains modified model weights derived from Laya Multilingual,
+licensed under the Apache License 2.0 by Convai Innovations.
+
+The encoder is based on mmBERT-base from Johns Hopkins University CLSP,
+licensed under the MIT License.

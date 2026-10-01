@@ -1,0 +1,31 @@
+{
+  "seed": 20260928,
+  "max_len": 512,
+  "head_max_len": 256,
+  "holdout_frac": 0.02,
+  "holdout_cap": 600,
+  "train_sources": {
+    "mnli":         {"n": 19600},
+    "xnli":         {"n": 2400},
+    "anli":         {"n": 6000},
+    "race":         {"n": 20000},
+    "c3":           {"n": 12000},
+    "boolq":        {"n": 9427},
+    "sciq":         {"n": 11679},
+    "qasc":         {"n": 8134},
+    "obqa":         {"n": 4957},
+    "csqa":         {"n": 9741},
+    "arc":          {"n": 2300},
+    "hellaswag":    {"n": 20000},
+    "winogrande":   {"n": 20000},
+    "piqa":         {"n": 16000},
+    "mmlu":         {"n": 14042},
+    "mmmlu":        {"n": 2200},
+    "ag_news":      {"n": 7600},
+    "tnews":        {"n": 8000},
+    "amazon_stars": {"n": 4000}
+  },
+  "wikidata": {"path": "data/raw/wikidata_entities.jsonl", "knowledge": 40000, "binding": 50000, "labels": 12000},
+  "eval": {"emotion": 1000, "sst5": 2210, "xcopa_per_lang": 100, "belebele_per_lang": 150, "xstory_per_lang": 150,
+           "wd_knowledge": 1500, "wd_binding": 2000, "wd_labels": 0}
+}

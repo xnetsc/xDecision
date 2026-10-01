@@ -1,0 +1,3416 @@
+{
+  "schema_version": 1,
+  "model": "xDecision",
+  "tensor_verification": {
+    "F16": {
+      "tensor_count": 170,
+      "rmse": 0.0,
+      "max_abs": 0.0,
+      "gguf_sha256": "03e7f60a701b01a569fc7b0ce3d2a3ded5dfb3d59861d1930e0a150b6d7f5f79",
+      "source_sha256": "73e882ecbff54b1b3fc4ad25940f333ab3af4aa44cbaf87327605295476dfc09",
+      "tensors": [
+        {
+          "name": "act_head.0.bias",
+          "shape": [
+            256
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "act_head.0.weight",
+          "shape": [
+            256,
+            772
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "act_head.2.bias",
+          "shape": [
+            2
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "act_head.2.weight",
+          "shape": [
+            2,
+            256
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.embeddings.norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.embeddings.tok_embeddings.weight",
+          "shape": [
+            256000,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.final_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.0.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.0.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.0.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.0.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.0.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.1.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.1.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.1.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.1.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.1.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.1.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.10.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.10.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.10.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.10.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.10.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.10.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.11.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.11.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.11.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.11.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.11.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.11.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.12.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.12.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.12.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.12.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.12.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.12.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.13.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.13.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.13.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.13.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.13.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.13.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.14.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.14.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.14.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.14.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.14.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.14.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.15.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.15.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.15.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.15.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.15.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.15.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.16.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.16.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.16.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.16.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.16.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.16.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.17.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.17.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.17.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.17.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.17.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.17.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.18.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.18.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.18.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.18.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.18.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.18.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.19.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.19.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.19.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.19.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.19.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.19.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.2.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.2.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.2.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.2.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.2.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.2.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.20.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.20.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.20.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.20.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.20.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.20.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.21.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.21.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.21.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.21.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.21.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.21.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.3.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.3.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.3.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.3.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.3.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.3.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.4.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.4.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.4.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.4.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.4.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.4.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.5.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.5.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.5.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.5.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.5.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.5.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.6.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.6.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.6.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.6.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.6.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.6.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.7.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.7.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.7.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.7.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.7.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.7.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.8.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.8.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.8.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.8.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.8.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.8.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.9.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.9.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.9.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.9.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.9.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.9.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.linear1.bias",
+          "shape": [
+            3072
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.linear1.weight",
+          "shape": [
+            3072,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.linear2.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.linear2.weight",
+          "shape": [
+            768,
+            3072
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.norm1.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.norm1.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.norm2.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.norm2.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.self_attn.in_proj_bias",
+          "shape": [
+            2304
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.self_attn.in_proj_weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.self_attn.out_proj.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.self_attn.out_proj.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.linear1.bias",
+          "shape": [
+            3072
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.linear1.weight",
+          "shape": [
+            3072,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.linear2.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.linear2.weight",
+          "shape": [
+            768,
+            3072
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.norm1.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.norm1.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.norm2.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.norm2.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.self_attn.in_proj_bias",
+          "shape": [
+            2304
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.self_attn.in_proj_weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.self_attn.out_proj.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.self_attn.out_proj.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "scorer.0.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "scorer.0.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "scorer.1.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "scorer.1.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "scorer.3.bias",
+          "shape": [
+            1
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "scorer.3.weight",
+          "shape": [
+            1,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "temperature",
+          "shape": [
+            3
+          ],
+          "type": "F32",
+          "max_abs": 0.0
+        },
+        {
+          "name": "type_emb.weight",
+          "shape": [
+            3,
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        }
+      ]
+    },
+    "Q8_0": {
+      "tensor_count": 170,
+      "rmse": 0.000276163798683857,
+      "max_abs": 0.01092529296875,
+      "gguf_sha256": "6030995d27ded5f27ddb22ed3c99c68bae4a061fd39c85e1d693729416ff69c0",
+      "source_sha256": "73e882ecbff54b1b3fc4ad25940f333ab3af4aa44cbaf87327605295476dfc09",
+      "tensors": [
+        {
+          "name": "act_head.0.bias",
+          "shape": [
+            256
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "act_head.0.weight",
+          "shape": [
+            256,
+            772
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "act_head.2.bias",
+          "shape": [
+            2
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "act_head.2.weight",
+          "shape": [
+            2,
+            256
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.000308990478515625
+        },
+        {
+          "name": "encoder.embeddings.norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.embeddings.tok_embeddings.weight",
+          "shape": [
+            256000,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0015878677368164062
+        },
+        {
+          "name": "encoder.final_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.0.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001434326171875
+        },
+        {
+          "name": "encoder.layers.0.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00495147705078125
+        },
+        {
+          "name": "encoder.layers.0.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00168609619140625
+        },
+        {
+          "name": "encoder.layers.0.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.003143310546875
+        },
+        {
+          "name": "encoder.layers.0.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.1.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00199127197265625
+        },
+        {
+          "name": "encoder.layers.1.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001861572265625
+        },
+        {
+          "name": "encoder.layers.1.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.1.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0020904541015625
+        },
+        {
+          "name": "encoder.layers.1.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0029754638671875
+        },
+        {
+          "name": "encoder.layers.1.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.10.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001556396484375
+        },
+        {
+          "name": "encoder.layers.10.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0018444061279296875
+        },
+        {
+          "name": "encoder.layers.10.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.10.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00203704833984375
+        },
+        {
+          "name": "encoder.layers.10.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00246429443359375
+        },
+        {
+          "name": "encoder.layers.10.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.11.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00112152099609375
+        },
+        {
+          "name": "encoder.layers.11.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0017547607421875
+        },
+        {
+          "name": "encoder.layers.11.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.11.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00363922119140625
+        },
+        {
+          "name": "encoder.layers.11.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00267791748046875
+        },
+        {
+          "name": "encoder.layers.11.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.12.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.002532958984375
+        },
+        {
+          "name": "encoder.layers.12.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0013751983642578125
+        },
+        {
+          "name": "encoder.layers.12.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.12.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.008056640625
+        },
+        {
+          "name": "encoder.layers.12.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0039520263671875
+        },
+        {
+          "name": "encoder.layers.12.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.13.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00116729736328125
+        },
+        {
+          "name": "encoder.layers.13.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.002811431884765625
+        },
+        {
+          "name": "encoder.layers.13.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.13.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.002666473388671875
+        },
+        {
+          "name": "encoder.layers.13.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00301361083984375
+        },
+        {
+          "name": "encoder.layers.13.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.14.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0011348724365234375
+        },
+        {
+          "name": "encoder.layers.14.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00125885009765625
+        },
+        {
+          "name": "encoder.layers.14.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.14.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.003627777099609375
+        },
+        {
+          "name": "encoder.layers.14.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00263214111328125
+        },
+        {
+          "name": "encoder.layers.14.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.15.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001216888427734375
+        },
+        {
+          "name": "encoder.layers.15.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0017242431640625
+        },
+        {
+          "name": "encoder.layers.15.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.15.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.002349853515625
+        },
+        {
+          "name": "encoder.layers.15.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.002529144287109375
+        },
+        {
+          "name": "encoder.layers.15.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.16.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001251220703125
+        },
+        {
+          "name": "encoder.layers.16.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001422882080078125
+        },
+        {
+          "name": "encoder.layers.16.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.16.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00213623046875
+        },
+        {
+          "name": "encoder.layers.16.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0016937255859375
+        },
+        {
+          "name": "encoder.layers.16.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.17.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0013580322265625
+        },
+        {
+          "name": "encoder.layers.17.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00174713134765625
+        },
+        {
+          "name": "encoder.layers.17.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.17.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00238800048828125
+        },
+        {
+          "name": "encoder.layers.17.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00228118896484375
+        },
+        {
+          "name": "encoder.layers.17.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.18.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00160980224609375
+        },
+        {
+          "name": "encoder.layers.18.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001556396484375
+        },
+        {
+          "name": "encoder.layers.18.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.18.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.003063201904296875
+        },
+        {
+          "name": "encoder.layers.18.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.004150390625
+        },
+        {
+          "name": "encoder.layers.18.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.19.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00131988525390625
+        },
+        {
+          "name": "encoder.layers.19.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0016021728515625
+        },
+        {
+          "name": "encoder.layers.19.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.19.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00139617919921875
+        },
+        {
+          "name": "encoder.layers.19.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00225067138671875
+        },
+        {
+          "name": "encoder.layers.19.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.2.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0014896392822265625
+        },
+        {
+          "name": "encoder.layers.2.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0017242431640625
+        },
+        {
+          "name": "encoder.layers.2.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.2.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001903533935546875
+        },
+        {
+          "name": "encoder.layers.2.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00290679931640625
+        },
+        {
+          "name": "encoder.layers.2.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.20.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0015859603881835938
+        },
+        {
+          "name": "encoder.layers.20.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00139617919921875
+        },
+        {
+          "name": "encoder.layers.20.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.20.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0015926361083984375
+        },
+        {
+          "name": "encoder.layers.20.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00209808349609375
+        },
+        {
+          "name": "encoder.layers.20.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.21.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001850128173828125
+        },
+        {
+          "name": "encoder.layers.21.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0017490386962890625
+        },
+        {
+          "name": "encoder.layers.21.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.21.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0013580322265625
+        },
+        {
+          "name": "encoder.layers.21.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00193023681640625
+        },
+        {
+          "name": "encoder.layers.21.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.3.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0011501312255859375
+        },
+        {
+          "name": "encoder.layers.3.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0013427734375
+        },
+        {
+          "name": "encoder.layers.3.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.3.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.002246856689453125
+        },
+        {
+          "name": "encoder.layers.3.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.003143310546875
+        },
+        {
+          "name": "encoder.layers.3.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.4.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001102447509765625
+        },
+        {
+          "name": "encoder.layers.4.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0015869140625
+        },
+        {
+          "name": "encoder.layers.4.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.4.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0020427703857421875
+        },
+        {
+          "name": "encoder.layers.4.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00385284423828125
+        },
+        {
+          "name": "encoder.layers.4.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.5.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001728057861328125
+        },
+        {
+          "name": "encoder.layers.5.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0018768310546875
+        },
+        {
+          "name": "encoder.layers.5.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.5.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00183868408203125
+        },
+        {
+          "name": "encoder.layers.5.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.003307342529296875
+        },
+        {
+          "name": "encoder.layers.5.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.6.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00177001953125
+        },
+        {
+          "name": "encoder.layers.6.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001857757568359375
+        },
+        {
+          "name": "encoder.layers.6.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.6.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0025482177734375
+        },
+        {
+          "name": "encoder.layers.6.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00262451171875
+        },
+        {
+          "name": "encoder.layers.6.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.7.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001373291015625
+        },
+        {
+          "name": "encoder.layers.7.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0016326904296875
+        },
+        {
+          "name": "encoder.layers.7.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.7.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00201416015625
+        },
+        {
+          "name": "encoder.layers.7.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00257110595703125
+        },
+        {
+          "name": "encoder.layers.7.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.8.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0012359619140625
+        },
+        {
+          "name": "encoder.layers.8.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.001800537109375
+        },
+        {
+          "name": "encoder.layers.8.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.8.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.002094268798828125
+        },
+        {
+          "name": "encoder.layers.8.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.002330780029296875
+        },
+        {
+          "name": "encoder.layers.8.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.9.attn.Wo.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0015583038330078125
+        },
+        {
+          "name": "encoder.layers.9.attn.Wqkv.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.00189208984375
+        },
+        {
+          "name": "encoder.layers.9.attn_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "encoder.layers.9.mlp.Wi.weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0024166107177734375
+        },
+        {
+          "name": "encoder.layers.9.mlp.Wo.weight",
+          "shape": [
+            768,
+            1152
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.002593994140625
+        },
+        {
+          "name": "encoder.layers.9.mlp_norm.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.linear1.bias",
+          "shape": [
+            3072
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.linear1.weight",
+          "shape": [
+            3072,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0009660720825195312
+        },
+        {
+          "name": "head.layers.0.linear2.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.linear2.weight",
+          "shape": [
+            768,
+            3072
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.000705718994140625
+        },
+        {
+          "name": "head.layers.0.norm1.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.norm1.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.norm2.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.norm2.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.self_attn.in_proj_bias",
+          "shape": [
+            2304
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.self_attn.in_proj_weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.000865936279296875
+        },
+        {
+          "name": "head.layers.0.self_attn.out_proj.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.0.self_attn.out_proj.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0004825592041015625
+        },
+        {
+          "name": "head.layers.1.linear1.bias",
+          "shape": [
+            3072
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.linear1.weight",
+          "shape": [
+            3072,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.000499725341796875
+        },
+        {
+          "name": "head.layers.1.linear2.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.linear2.weight",
+          "shape": [
+            768,
+            3072
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0005340576171875
+        },
+        {
+          "name": "head.layers.1.norm1.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.norm1.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.norm2.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.norm2.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.self_attn.in_proj_bias",
+          "shape": [
+            2304
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.self_attn.in_proj_weight",
+          "shape": [
+            2304,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0007429122924804688
+        },
+        {
+          "name": "head.layers.1.self_attn.out_proj.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "head.layers.1.self_attn.out_proj.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.000537872314453125
+        },
+        {
+          "name": "scorer.0.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "scorer.0.weight",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "scorer.1.bias",
+          "shape": [
+            768
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "scorer.1.weight",
+          "shape": [
+            768,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.0007781982421875
+        },
+        {
+          "name": "scorer.3.bias",
+          "shape": [
+            1
+          ],
+          "type": "F16",
+          "max_abs": 0.0
+        },
+        {
+          "name": "scorer.3.weight",
+          "shape": [
+            1,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.000392913818359375
+        },
+        {
+          "name": "temperature",
+          "shape": [
+            3
+          ],
+          "type": "F32",
+          "max_abs": 0.0
+        },
+        {
+          "name": "type_emb.weight",
+          "shape": [
+            3,
+            768
+          ],
+          "type": "Q8_0",
+          "max_abs": 0.01092529296875
+        }
+      ]
+    }
+  },
+  "quantization_comparison": {
+    "typed_decisions": {
+      "F16": {
+        "n": 2000,
+        "acc": 0.5875,
+        "soft_acc": 0.3968,
+        "ece": 0.1236,
+        "act_auroc": 0.6583,
+        "nll": 0.9602,
+        "brier": 0.5452,
+        "wrong_high_conf_rate_080": 0.0,
+        "coverage_at_080": 0.06,
+        "accuracy_at_080": 1.0,
+        "aurc": 0.2569,
+        "score_mae": 0.7707,
+        "first_level_rate": 0.105,
+        "first_level_gold_rate": 0.155
+      },
+      "Q8_0": {
+        "n": 2000,
+        "acc": 0.584,
+        "soft_acc": 0.3966,
+        "ece": 0.1236,
+        "act_auroc": 0.6569,
+        "nll": 0.9605,
+        "brier": 0.5454,
+        "wrong_high_conf_rate_080": 0.0005,
+        "coverage_at_080": 0.0595,
+        "accuracy_at_080": 0.9916,
+        "aurc": 0.2585,
+        "score_mae": 0.7703,
+        "first_level_rate": 0.1037,
+        "first_level_gold_rate": 0.155
+      },
+      "accuracy_difference_pp": -0.35
+    },
+    "emotion": {
+      "F16": {
+        "n": 1000,
+        "acc": 0.566,
+        "soft_acc": 0.4498,
+        "ece": 0.0971,
+        "act_auroc": 0.6669,
+        "nll": 1.2737,
+        "brier": 0.6093,
+        "wrong_high_conf_rate_080": 0.08,
+        "coverage_at_080": 0.277,
+        "accuracy_at_080": 0.7112,
+        "aurc": 0.3125
+      },
+      "Q8_0": {
+        "n": 1000,
+        "acc": 0.565,
+        "soft_acc": 0.4499,
+        "ece": 0.0912,
+        "act_auroc": 0.6649,
+        "nll": 1.2779,
+        "brier": 0.6105,
+        "wrong_high_conf_rate_080": 0.08,
+        "coverage_at_080": 0.276,
+        "accuracy_at_080": 0.7101,
+        "aurc": 0.3145
+      },
+      "accuracy_difference_pp": -0.1
+    },
+    "sst5": {
+      "F16": {
+        "n": 2210,
+        "acc": 0.4484,
+        "soft_acc": 0.3191,
+        "ece": 0.0742,
+        "act_auroc": 0.6379,
+        "nll": 1.2458,
+        "brier": 0.6661,
+        "wrong_high_conf_rate_080": 0.0059,
+        "coverage_at_080": 0.0195,
+        "accuracy_at_080": 0.6977,
+        "aurc": 0.4583,
+        "score_mae": 0.695,
+        "first_level_rate": 0.1484,
+        "first_level_gold_rate": 0.1262
+      },
+      "Q8_0": {
+        "n": 2210,
+        "acc": 0.4484,
+        "soft_acc": 0.3189,
+        "ece": 0.0754,
+        "act_auroc": 0.6381,
+        "nll": 1.2466,
+        "brier": 0.6664,
+        "wrong_high_conf_rate_080": 0.0059,
+        "coverage_at_080": 0.0199,
+        "accuracy_at_080": 0.7045,
+        "aurc": 0.4591,
+        "score_mae": 0.6955,
+        "first_level_rate": 0.1538,
+        "first_level_gold_rate": 0.1262
+      },
+      "accuracy_difference_pp": 0.0
+    },
+    "prompt_injection": {
+      "F16": {
+        "n": 116,
+        "acc": 0.6724,
+        "soft_acc": 0.6712,
+        "ece": 0.232,
+        "act_auroc": 0.6009,
+        "nll": 1.3454,
+        "brier": 0.5341,
+        "wrong_high_conf_rate_080": 0.2069,
+        "coverage_at_080": 0.7672,
+        "accuracy_at_080": 0.7303,
+        "aurc": 0.2262
+      },
+      "Q8_0": {
+        "n": 116,
+        "acc": 0.6724,
+        "soft_acc": 0.6721,
+        "ece": 0.2441,
+        "act_auroc": 0.6063,
+        "nll": 1.3385,
+        "brier": 0.5334,
+        "wrong_high_conf_rate_080": 0.2069,
+        "coverage_at_080": 0.7672,
+        "accuracy_at_080": 0.7303,
+        "aurc": 0.2201
+      },
+      "accuracy_difference_pp": 0.0
+    },
+    "xcopa": {
+      "F16": {
+        "n": 1100,
+        "acc": 0.5909,
+        "soft_acc": 0.5436,
+        "ece": 0.0794,
+        "act_auroc": 0.5697,
+        "nll": 0.6966,
+        "brier": 0.4931,
+        "wrong_high_conf_rate_080": 0.04,
+        "coverage_at_080": 0.1545,
+        "accuracy_at_080": 0.7412,
+        "aurc": 0.3435
+      },
+      "Q8_0": {
+        "n": 1100,
+        "acc": 0.5864,
+        "soft_acc": 0.5437,
+        "ece": 0.0771,
+        "act_auroc": 0.5729,
+        "nll": 0.6976,
+        "brier": 0.4934,
+        "wrong_high_conf_rate_080": 0.0418,
+        "coverage_at_080": 0.1582,
+        "accuracy_at_080": 0.7356,
+        "aurc": 0.3438
+      },
+      "accuracy_difference_pp": -0.45
+    },
+    "xwinograd": {
+      "F16": {
+        "n": 4442,
+        "acc": 0.6294,
+        "soft_acc": 0.5699,
+        "ece": 0.0502,
+        "act_auroc": 0.5835,
+        "nll": 0.6573,
+        "brier": 0.4585,
+        "wrong_high_conf_rate_080": 0.0412,
+        "coverage_at_080": 0.1918,
+        "accuracy_at_080": 0.7852,
+        "aurc": 0.2804
+      },
+      "Q8_0": {
+        "n": 4442,
+        "acc": 0.6285,
+        "soft_acc": 0.5703,
+        "ece": 0.0491,
+        "act_auroc": 0.5843,
+        "nll": 0.6562,
+        "brier": 0.4575,
+        "wrong_high_conf_rate_080": 0.0405,
+        "coverage_at_080": 0.1923,
+        "accuracy_at_080": 0.7892,
+        "aurc": 0.2791
+      },
+      "accuracy_difference_pp": -0.09
+    },
+    "belebele": {
+      "F16": {
+        "n": 2091,
+        "acc": 0.5538,
+        "soft_acc": 0.4558,
+        "ece": 0.0547,
+        "act_auroc": 0.6739,
+        "nll": 1.0786,
+        "brier": 0.5695,
+        "wrong_high_conf_rate_080": 0.0378,
+        "coverage_at_080": 0.2396,
+        "accuracy_at_080": 0.8423,
+        "aurc": 0.265
+      },
+      "Q8_0": {
+        "n": 2091,
+        "acc": 0.5562,
+        "soft_acc": 0.4559,
+        "ece": 0.0557,
+        "act_auroc": 0.6738,
+        "nll": 1.0782,
+        "brier": 0.5691,
+        "wrong_high_conf_rate_080": 0.0368,
+        "coverage_at_080": 0.2391,
+        "accuracy_at_080": 0.846,
+        "aurc": 0.2644
+      },
+      "accuracy_difference_pp": 0.24
+    },
+    "xstory": {
+      "F16": {
+        "n": 1649,
+        "acc": 0.7095,
+        "soft_acc": 0.635,
+        "ece": 0.023,
+        "act_auroc": 0.6878,
+        "nll": 0.5465,
+        "brier": 0.3715,
+        "wrong_high_conf_rate_080": 0.0376,
+        "coverage_at_080": 0.319,
+        "accuracy_at_080": 0.8821,
+        "aurc": 0.1611
+      },
+      "Q8_0": {
+        "n": 1649,
+        "acc": 0.7071,
+        "soft_acc": 0.6341,
+        "ece": 0.0304,
+        "act_auroc": 0.687,
+        "nll": 0.5476,
+        "brier": 0.3724,
+        "wrong_high_conf_rate_080": 0.0364,
+        "coverage_at_080": 0.3129,
+        "accuracy_at_080": 0.8837,
+        "aurc": 0.162
+      },
+      "accuracy_difference_pp": -0.24
+    },
+    "wd_heldout": {
+      "F16": {
+        "n": 3377,
+        "acc": 0.9094,
+        "soft_acc": 0.8751,
+        "ece": 0.0178,
+        "act_auroc": 0.8559,
+        "nll": 0.2064,
+        "brier": 0.1199,
+        "wrong_high_conf_rate_080": 0.0092,
+        "coverage_at_080": 0.7909,
+        "accuracy_at_080": 0.9884,
+        "aurc": 0.0095
+      },
+      "Q8_0": {
+        "n": 3377,
+        "acc": 0.9094,
+        "soft_acc": 0.8747,
+        "ece": 0.0158,
+        "act_auroc": 0.8561,
+        "nll": 0.2069,
+        "brier": 0.1203,
+        "wrong_high_conf_rate_080": 0.0092,
+        "coverage_at_080": 0.7901,
+        "accuracy_at_080": 0.9884,
+        "aurc": 0.0095
+      },
+      "accuracy_difference_pp": 0.0
+    },
+    "wiki_heldout": {
+      "F16": {
+        "n": 1500,
+        "acc": 0.9147,
+        "soft_acc": 0.8845,
+        "ece": 0.0147,
+        "act_auroc": 0.8152,
+        "nll": 0.2137,
+        "brier": 0.1172,
+        "wrong_high_conf_rate_080": 0.0193,
+        "coverage_at_080": 0.8273,
+        "accuracy_at_080": 0.9766,
+        "aurc": 0.0107
+      },
+      "Q8_0": {
+        "n": 1500,
+        "acc": 0.9127,
+        "soft_acc": 0.8846,
+        "ece": 0.0168,
+        "act_auroc": 0.8169,
+        "nll": 0.2137,
+        "brier": 0.1172,
+        "wrong_high_conf_rate_080": 0.0193,
+        "coverage_at_080": 0.828,
+        "accuracy_at_080": 0.9767,
+        "aurc": 0.0108
+      },
+      "accuracy_difference_pp": -0.2
+    },
+    "hans_formats": {
+      "F16": {
+        "n": 6000,
+        "acc": 0.9987,
+        "soft_acc": 0.988,
+        "ece": 0.0101,
+        "act_auroc": 0.6227,
+        "nll": 0.0138,
+        "brier": 0.0043,
+        "wrong_high_conf_rate_080": 0.0003,
+        "coverage_at_080": 0.9912,
+        "accuracy_at_080": 0.9997,
+        "aurc": 0.0
+      },
+      "Q8_0": {
+        "n": 6000,
+        "acc": 0.9987,
+        "soft_acc": 0.9878,
+        "ece": 0.0103,
+        "act_auroc": 0.6301,
+        "nll": 0.0139,
+        "brier": 0.0043,
+        "wrong_high_conf_rate_080": 0.0003,
+        "coverage_at_080": 0.9902,
+        "accuracy_at_080": 0.9997,
+        "aurc": 0.0
+      },
+      "accuracy_difference_pp": 0.0
+    },
+    "unseen_workflows": {
+      "F16": {
+        "n": 920,
+        "acc": 0.5043,
+        "soft_acc": 0.3854,
+        "ece": 0.0545,
+        "act_auroc": 0.5302,
+        "nll": 1.0906,
+        "brier": 0.6046,
+        "wrong_high_conf_rate_080": 0.013,
+        "coverage_at_080": 0.0543,
+        "accuracy_at_080": 0.76,
+        "aurc": 0.3556,
+        "score_mae": 1.0971,
+        "first_level_rate": 0.1,
+        "first_level_gold_rate": 0.2333
+      },
+      "Q8_0": {
+        "n": 920,
+        "acc": 0.5033,
+        "soft_acc": 0.3852,
+        "ece": 0.056,
+        "act_auroc": 0.5313,
+        "nll": 1.0897,
+        "brier": 0.6045,
+        "wrong_high_conf_rate_080": 0.013,
+        "coverage_at_080": 0.0522,
+        "accuracy_at_080": 0.75,
+        "aurc": 0.3558,
+        "score_mae": 1.0984,
+        "first_level_rate": 0.1,
+        "first_level_gold_rate": 0.2333
+      },
+      "accuracy_difference_pp": -0.1
+    },
+    "market_heldout": {
+      "F16": {
+        "n": 740,
+        "acc": 0.7892,
+        "soft_acc": 0.5447,
+        "ece": 0.203,
+        "act_auroc": 0.7169,
+        "nll": 0.6741,
+        "brier": 0.3473,
+        "wrong_high_conf_rate_080": 0.0,
+        "coverage_at_080": 0.323,
+        "accuracy_at_080": 1.0,
+        "aurc": 0.0496,
+        "score_mae": 0.8458,
+        "first_level_rate": 0.4649,
+        "first_level_gold_rate": 0.4216
+      },
+      "Q8_0": {
+        "n": 740,
+        "acc": 0.7892,
+        "soft_acc": 0.5445,
+        "ece": 0.2033,
+        "act_auroc": 0.7212,
+        "nll": 0.6746,
+        "brier": 0.3474,
+        "wrong_high_conf_rate_080": 0.0,
+        "coverage_at_080": 0.3203,
+        "accuracy_at_080": 1.0,
+        "aurc": 0.0494,
+        "score_mae": 0.846,
+        "first_level_rate": 0.4811,
+        "first_level_gold_rate": 0.4216
+      },
+      "accuracy_difference_pp": 0.0
+    },
+    "uncertainty": {
+      "F16": {
+        "n": 1200,
+        "mean_conf": 0.4588,
+        "p95_conf": 0.6966,
+        "high_conf_rate_075": 0.0367,
+        "mean_act": 0.1307,
+        "p95_act": 0.2542
+      },
+      "Q8_0": {
+        "n": 1200,
+        "mean_conf": 0.4542,
+        "p95_conf": 0.674,
+        "high_conf_rate_075": 0.03,
+        "mean_act": 0.1017,
+        "p95_act": 0.1915
+      }
+    },
+    "val": {
+      "F16": {
+        "n": 3599,
+        "acc": 0.7041,
+        "soft_acc": 0.6196,
+        "ece": 0.0306,
+        "act_auroc": 0.752,
+        "nll": 0.6882,
+        "brier": 0.3766,
+        "wrong_high_conf_rate_080": 0.0167,
+        "coverage_at_080": 0.4193,
+        "accuracy_at_080": 0.9602,
+        "aurc": 0.0986,
+        "score_mae": 0.6004,
+        "first_level_rate": 0.2333,
+        "first_level_gold_rate": 0.2458
+      },
+      "Q8_0": {
+        "n": 3599,
+        "acc": 0.7013,
+        "soft_acc": 0.6194,
+        "ece": 0.0288,
+        "act_auroc": 0.7532,
+        "nll": 0.6885,
+        "brier": 0.3768,
+        "wrong_high_conf_rate_080": 0.0169,
+        "coverage_at_080": 0.4204,
+        "accuracy_at_080": 0.9597,
+        "aurc": 0.099,
+        "score_mae": 0.6007,
+        "first_level_rate": 0.2333,
+        "first_level_gold_rate": 0.2458
+      },
+      "accuracy_difference_pp": -0.28
+    }
+  },
+  "checks": {
+    "f16_original_weight_sha_equal": true,
+    "f16_choice_noul_score_runtime": "passed",
+    "f16_restored_continuation_training_steps": 2,
+    "data_validated_unique_token_sequences": 297986
+  },
+  "limitations": [
+    "F16 accuracy uses saved evaluation of the byte-identical original checkpoint.",
+    "Q8_0 was restored and fully evaluated using PyTorch MPS, not native integer inference.",
+    "Continuation smoke testing does not demonstrate accuracy improvement.",
+    "Pattern scans cannot prove the complete absence of sensitive information."
+  ]
+}

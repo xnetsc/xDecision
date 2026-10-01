@@ -1,0 +1,4 @@
+{"state":"The delivery arrived yesterday.","question":{"type":"choice","instructions":"Select the delivery status.","criteria":{"arrived":"Delivered","pending":"Not yet delivered"}},"target":[1.0,0.0]}
+{"state":"The appointment was cancelled.","question":{"type":"noul","instructions":"The appointment is still scheduled."},"target":[1.0,0.0]}
+{"state":"The system reports medium load.","question":{"type":"score","instructions":"Rate the load.","criteria":["low","medium","high"]},"target":[0.0,1.0,0.0]}
+{"state":"No delivery status is available.","question":{"type":"choice","instructions":"Select the delivery status.","criteria":{"arrived":"Delivered","pending":"Not yet delivered"}},"target":[0.5,0.5]}

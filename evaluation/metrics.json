@@ -1,0 +1,2083 @@
+{
+  "schema_version": 1,
+  "notes": [
+    "Historical local evaluation, not an independently reproduced leaderboard.",
+    "Typed-decisions overall includes training-related workflows; agent_trace_observability is the unseen-workflow slice.",
+    "Accuracy is argmax, not rounded score expectation; calibration is not certainty."
+  ],
+  "models": {
+    "upstream": {
+      "suites": {
+        "typed_decisions": {
+          "all": {
+            "n": 2000,
+            "acc": 0.352,
+            "soft_acc": 0.3226,
+            "ece": 0.0913,
+            "act_auroc": 0.5308,
+            "score_mae": 0.9518,
+            "first_level_rate": 0.015,
+            "first_level_gold_rate": 0.155
+          },
+          "by_t": {
+            "choice": {
+              "n": 600,
+              "acc": 0.295,
+              "soft_acc": 0.265,
+              "ece": 0.0937,
+              "act_auroc": 0.4478
+            },
+            "noul": {
+              "n": 600,
+              "acc": 0.4967,
+              "soft_acc": 0.4831,
+              "ece": 0.1937,
+              "act_auroc": 0.4972
+            },
+            "score": {
+              "n": 800,
+              "acc": 0.2863,
+              "soft_acc": 0.2455,
+              "ece": 0.0145,
+              "act_auroc": 0.5552,
+              "score_mae": 0.9518,
+              "first_level_rate": 0.015,
+              "first_level_gold_rate": 0.155
+            }
+          },
+          "by_workflow": {
+            "agent_trace_observability": {
+              "n": 500,
+              "acc": 0.286,
+              "soft_acc": 0.2942,
+              "ece": 0.1267,
+              "act_auroc": 0.4707,
+              "score_mae": 1.0658,
+              "first_level_rate": 0.0,
+              "first_level_gold_rate": 0.355
+            },
+            "customer_service": {
+              "n": 500,
+              "acc": 0.42,
+              "soft_acc": 0.3327,
+              "ece": 0.0487,
+              "act_auroc": 0.4821,
+              "score_mae": 0.8259,
+              "first_level_rate": 0.035,
+              "first_level_gold_rate": 0.015
+            },
+            "invoice_processing": {
+              "n": 500,
+              "acc": 0.308,
+              "soft_acc": 0.3092,
+              "ece": 0.1798,
+              "act_auroc": 0.5151,
+              "score_mae": 1.0037,
+              "first_level_rate": 0.0,
+              "first_level_gold_rate": 0.235
+            },
+            "security_incidents": {
+              "n": 500,
+              "acc": 0.394,
+              "soft_acc": 0.3545,
+              "ece": 0.0576,
+              "act_auroc": 0.494,
+              "score_mae": 0.9117,
+              "first_level_rate": 0.025,
+              "first_level_gold_rate": 0.015
+            }
+          }
+        },
+        "emotion": {
+          "all": {
+            "n": 1000,
+            "acc": 0.545,
+            "soft_acc": 0.318,
+            "ece": 0.1378,
+            "act_auroc": 0.4826
+          }
+        },
+        "sst5": {
+          "all": {
+            "n": 2210,
+            "acc": 0.2729,
+            "soft_acc": 0.2218,
+            "ece": 0.1507,
+            "act_auroc": 0.49,
+            "score_mae": 1.1676,
+            "first_level_rate": 0.2357,
+            "first_level_gold_rate": 0.1262
+          }
+        },
+        "prompt_injection": {
+          "all": {
+            "n": 116,
+            "acc": 0.6466,
+            "soft_acc": 0.6175,
+            "ece": 0.1928,
+            "act_auroc": 0.5971
+          }
+        },
+        "xcopa": {
+          "all": {
+            "n": 1100,
+            "acc": 0.5764,
+            "soft_acc": 0.5113,
+            "ece": 0.0315,
+            "act_auroc": 0.4989
+          }
+        },
+        "xwinograd": {
+          "all": {
+            "n": 4442,
+            "acc": 0.5216,
+            "soft_acc": 0.5062,
+            "ece": 0.0564,
+            "act_auroc": 0.4992
+          }
+        },
+        "belebele": {
+          "all": {
+            "n": 2091,
+            "acc": 0.3372,
+            "soft_acc": 0.2675,
+            "ece": 0.0176,
+            "act_auroc": 0.5049
+          }
+        },
+        "xstory": {
+          "all": {
+            "n": 1649,
+            "acc": 0.5719,
+            "soft_acc": 0.5138,
+            "ece": 0.0237,
+            "act_auroc": 0.5202
+          }
+        },
+        "wd_heldout": {
+          "all": {
+            "n": 3377,
+            "acc": 0.4847,
+            "soft_acc": 0.3996,
+            "ece": 0.0617,
+            "act_auroc": 0.4705
+          },
+          "by_t": {
+            "choice": {
+              "n": 2838,
+              "acc": 0.4644,
+              "soft_acc": 0.3733,
+              "ece": 0.0607,
+              "act_auroc": 0.4667
+            },
+            "noul": {
+              "n": 539,
+              "acc": 0.5918,
+              "soft_acc": 0.5384,
+              "ece": 0.087,
+              "act_auroc": 0.5042
+            }
+          }
+        },
+        "wiki_heldout": {
+          "all": {
+            "n": 1500,
+            "acc": 0.6073,
+            "soft_acc": 0.4327,
+            "ece": 0.1327,
+            "act_auroc": 0.4716
+          },
+          "by_t": {
+            "choice": {
+              "n": 1361,
+              "acc": 0.6076,
+              "soft_acc": 0.4209,
+              "ece": 0.1444,
+              "act_auroc": 0.4736
+            },
+            "noul": {
+              "n": 139,
+              "acc": 0.6043,
+              "soft_acc": 0.5485,
+              "ece": 0.102,
+              "act_auroc": 0.4212
+            }
+          }
+        },
+        "val": {
+          "all": {
+            "n": 3599,
+            "acc": 0.4885,
+            "soft_acc": 0.3789,
+            "ece": 0.0476,
+            "act_auroc": 0.525,
+            "score_mae": 1.1845,
+            "first_level_rate": 0.3583,
+            "first_level_gold_rate": 0.2458
+          },
+          "by_t": {
+            "choice": {
+              "n": 2892,
+              "acc": 0.4637,
+              "soft_acc": 0.3562,
+              "ece": 0.0506,
+              "act_auroc": 0.4909
+            },
+            "noul": {
+              "n": 467,
+              "acc": 0.7195,
+              "soft_acc": 0.5965,
+              "ece": 0.0524,
+              "act_auroc": 0.5698
+            },
+            "score": {
+              "n": 240,
+              "acc": 0.3375,
+              "soft_acc": 0.2293,
+              "ece": 0.0546,
+              "act_auroc": 0.4623,
+              "score_mae": 1.1845,
+              "first_level_rate": 0.3583,
+              "first_level_gold_rate": 0.2458
+            }
+          }
+        }
+      }
+    },
+    "previous": {
+      "suites": {
+        "typed_decisions": {
+          "all": {
+            "n": 2000,
+            "acc": 0.564,
+            "soft_acc": 0.397,
+            "ece": 0.0614,
+            "act_auroc": 0.6521,
+            "score_mae": 0.7966,
+            "first_level_rate": 0.0825,
+            "first_level_gold_rate": 0.155
+          },
+          "by_t": {
+            "choice": {
+              "n": 600,
+              "acc": 0.5317,
+              "soft_acc": 0.3406,
+              "ece": 0.1104,
+              "act_auroc": 0.7085
+            },
+            "noul": {
+              "n": 600,
+              "acc": 0.69,
+              "soft_acc": 0.5661,
+              "ece": 0.073,
+              "act_auroc": 0.7125
+            },
+            "score": {
+              "n": 800,
+              "acc": 0.4938,
+              "soft_acc": 0.3124,
+              "ece": 0.0997,
+              "act_auroc": 0.5913,
+              "score_mae": 0.7966,
+              "first_level_rate": 0.0825,
+              "first_level_gold_rate": 0.155
+            }
+          },
+          "by_workflow": {
+            "agent_trace_observability": {
+              "n": 500,
+              "acc": 0.274,
+              "soft_acc": 0.2908,
+              "ece": 0.2088,
+              "act_auroc": 0.6081,
+              "score_mae": 1.2582,
+              "first_level_rate": 0.01,
+              "first_level_gold_rate": 0.355
+            },
+            "customer_service": {
+              "n": 500,
+              "acc": 0.686,
+              "soft_acc": 0.4357,
+              "ece": 0.1684,
+              "act_auroc": 0.6274,
+              "score_mae": 0.4972,
+              "first_level_rate": 0.0,
+              "first_level_gold_rate": 0.015
+            },
+            "invoice_processing": {
+              "n": 500,
+              "acc": 0.624,
+              "soft_acc": 0.4565,
+              "ece": 0.1064,
+              "act_auroc": 0.6616,
+              "score_mae": 0.8649,
+              "first_level_rate": 0.32,
+              "first_level_gold_rate": 0.235
+            },
+            "security_incidents": {
+              "n": 500,
+              "acc": 0.672,
+              "soft_acc": 0.4048,
+              "ece": 0.1863,
+              "act_auroc": 0.6403,
+              "score_mae": 0.5663,
+              "first_level_rate": 0.0,
+              "first_level_gold_rate": 0.015
+            }
+          }
+        },
+        "emotion": {
+          "all": {
+            "n": 1000,
+            "acc": 0.555,
+            "soft_acc": 0.4497,
+            "ece": 0.082,
+            "act_auroc": 0.6854
+          }
+        },
+        "sst5": {
+          "all": {
+            "n": 2210,
+            "acc": 0.4281,
+            "soft_acc": 0.3401,
+            "ece": 0.0395,
+            "act_auroc": 0.6284,
+            "score_mae": 0.7117,
+            "first_level_rate": 0.1023,
+            "first_level_gold_rate": 0.1262
+          }
+        },
+        "prompt_injection": {
+          "all": {
+            "n": 116,
+            "acc": 0.681,
+            "soft_acc": 0.6739,
+            "ece": 0.1983,
+            "act_auroc": 0.6575
+          }
+        },
+        "xcopa": {
+          "all": {
+            "n": 1100,
+            "acc": 0.5655,
+            "soft_acc": 0.5332,
+            "ece": 0.0626,
+            "act_auroc": 0.5952
+          }
+        },
+        "xwinograd": {
+          "all": {
+            "n": 4442,
+            "acc": 0.6263,
+            "soft_acc": 0.5777,
+            "ece": 0.0782,
+            "act_auroc": 0.5974
+          }
+        },
+        "belebele": {
+          "all": {
+            "n": 2091,
+            "acc": 0.5375,
+            "soft_acc": 0.4535,
+            "ece": 0.0775,
+            "act_auroc": 0.6904
+          }
+        },
+        "xstory": {
+          "all": {
+            "n": 1649,
+            "acc": 0.7004,
+            "soft_acc": 0.6033,
+            "ece": 0.0335,
+            "act_auroc": 0.6538
+          }
+        },
+        "wd_heldout": {
+          "all": {
+            "n": 3377,
+            "acc": 0.9055,
+            "soft_acc": 0.8745,
+            "ece": 0.0141,
+            "act_auroc": 0.8737
+          },
+          "by_t": {
+            "choice": {
+              "n": 2838,
+              "acc": 0.9052,
+              "soft_acc": 0.8782,
+              "ece": 0.0151,
+              "act_auroc": 0.909
+            },
+            "noul": {
+              "n": 539,
+              "acc": 0.9072,
+              "soft_acc": 0.8551,
+              "ece": 0.0297,
+              "act_auroc": 0.7367
+            }
+          }
+        },
+        "wiki_heldout": {
+          "all": {
+            "n": 1500,
+            "acc": 0.916,
+            "soft_acc": 0.87,
+            "ece": 0.0253,
+            "act_auroc": 0.8389
+          },
+          "by_t": {
+            "choice": {
+              "n": 1361,
+              "acc": 0.9199,
+              "soft_acc": 0.8759,
+              "ece": 0.0251,
+              "act_auroc": 0.8569
+            },
+            "noul": {
+              "n": 139,
+              "acc": 0.8777,
+              "soft_acc": 0.8128,
+              "ece": 0.0444,
+              "act_auroc": 0.8312
+            }
+          }
+        },
+        "val": {
+          "all": {
+            "n": 3599,
+            "acc": 0.7008,
+            "soft_acc": 0.6282,
+            "ece": 0.0199,
+            "act_auroc": 0.7712,
+            "score_mae": 0.6089,
+            "first_level_rate": 0.2042,
+            "first_level_gold_rate": 0.2458
+          },
+          "by_t": {
+            "choice": {
+              "n": 2892,
+              "acc": 0.6829,
+              "soft_acc": 0.6116,
+              "ece": 0.0246,
+              "act_auroc": 0.7809
+            },
+            "noul": {
+              "n": 467,
+              "acc": 0.8758,
+              "soft_acc": 0.8324,
+              "ece": 0.0413,
+              "act_auroc": 0.7569
+            },
+            "score": {
+              "n": 240,
+              "acc": 0.575,
+              "soft_acc": 0.4306,
+              "ece": 0.0434,
+              "act_auroc": 0.6402,
+              "score_mae": 0.6089,
+              "first_level_rate": 0.2042,
+              "first_level_gold_rate": 0.2458
+            }
+          }
+        }
+      }
+    },
+    "xDecision": {
+      "suites": {
+        "typed_decisions": {
+          "all": {
+            "n": 2000,
+            "acc": 0.5875,
+            "soft_acc": 0.3968,
+            "ece": 0.1236,
+            "act_auroc": 0.6583,
+            "nll": 0.9602,
+            "brier": 0.5452,
+            "wrong_high_conf_rate_080": 0.0,
+            "coverage_at_080": 0.06,
+            "accuracy_at_080": 1.0,
+            "aurc": 0.2569,
+            "score_mae": 0.7707,
+            "first_level_rate": 0.105,
+            "first_level_gold_rate": 0.155
+          },
+          "by_t": {
+            "choice": {
+              "n": 600,
+              "acc": 0.5733,
+              "soft_acc": 0.349,
+              "ece": 0.1515,
+              "act_auroc": 0.6919,
+              "nll": 1.081,
+              "brier": 0.5855,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.0583,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.2693
+            },
+            "noul": {
+              "n": 600,
+              "acc": 0.7083,
+              "soft_acc": 0.5706,
+              "ece": 0.0919,
+              "act_auroc": 0.7241,
+              "nll": 0.5595,
+              "brier": 0.3811,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.1367,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.1356
+            },
+            "score": {
+              "n": 800,
+              "acc": 0.5075,
+              "soft_acc": 0.3022,
+              "ece": 0.1289,
+              "act_auroc": 0.6287,
+              "nll": 1.1702,
+              "brier": 0.6379,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.0037,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.405,
+              "score_mae": 0.7707,
+              "first_level_rate": 0.105,
+              "first_level_gold_rate": 0.155
+            }
+          },
+          "by_workflow": {
+            "agent_trace_observability": {
+              "n": 500,
+              "acc": 0.344,
+              "soft_acc": 0.3164,
+              "ece": 0.1037,
+              "act_auroc": 0.4926,
+              "nll": 1.2125,
+              "brier": 0.6886,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.0,
+              "accuracy_at_080": null,
+              "aurc": 0.5627,
+              "score_mae": 0.9804,
+              "first_level_rate": 0.09,
+              "first_level_gold_rate": 0.355
+            },
+            "customer_service": {
+              "n": 500,
+              "acc": 0.708,
+              "soft_acc": 0.4315,
+              "ece": 0.2053,
+              "act_auroc": 0.6556,
+              "nll": 0.8507,
+              "brier": 0.4699,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.078,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.1511,
+              "score_mae": 0.5654,
+              "first_level_rate": 0.01,
+              "first_level_gold_rate": 0.015
+            },
+            "invoice_processing": {
+              "n": 500,
+              "acc": 0.62,
+              "soft_acc": 0.4466,
+              "ece": 0.123,
+              "act_auroc": 0.5896,
+              "nll": 0.8679,
+              "brier": 0.4972,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.162,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.2115,
+              "score_mae": 0.9059,
+              "first_level_rate": 0.32,
+              "first_level_gold_rate": 0.235
+            },
+            "security_incidents": {
+              "n": 500,
+              "acc": 0.678,
+              "soft_acc": 0.3926,
+              "ece": 0.2235,
+              "act_auroc": 0.6664,
+              "nll": 0.9098,
+              "brier": 0.5249,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.0,
+              "accuracy_at_080": null,
+              "aurc": 0.2251,
+              "score_mae": 0.6311,
+              "first_level_rate": 0.0,
+              "first_level_gold_rate": 0.015
+            }
+          }
+        },
+        "prompt_injection": {
+          "all": {
+            "n": 116,
+            "acc": 0.6724,
+            "soft_acc": 0.6712,
+            "ece": 0.232,
+            "act_auroc": 0.6009,
+            "nll": 1.3454,
+            "brier": 0.5341,
+            "wrong_high_conf_rate_080": 0.2069,
+            "coverage_at_080": 0.7672,
+            "accuracy_at_080": 0.7303,
+            "aurc": 0.2262
+          }
+        },
+        "unseen_workflows": {
+          "all": {
+            "n": 920,
+            "acc": 0.5043,
+            "soft_acc": 0.3854,
+            "ece": 0.0545,
+            "act_auroc": 0.5302,
+            "nll": 1.0906,
+            "brier": 0.6046,
+            "wrong_high_conf_rate_080": 0.013,
+            "coverage_at_080": 0.0543,
+            "accuracy_at_080": 0.76,
+            "aurc": 0.3556,
+            "score_mae": 1.0971,
+            "first_level_rate": 0.1,
+            "first_level_gold_rate": 0.2333
+          },
+          "by_t": {
+            "choice": {
+              "n": 240,
+              "acc": 0.3583,
+              "soft_acc": 0.2466,
+              "ece": 0.0724,
+              "act_auroc": 0.5398,
+              "nll": 1.4743,
+              "brier": 0.7383,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.0,
+              "accuracy_at_080": null,
+              "aurc": 0.5146
+            },
+            "noul": {
+              "n": 440,
+              "acc": 0.6614,
+              "soft_acc": 0.5474,
+              "ece": 0.0545,
+              "act_auroc": 0.4869,
+              "nll": 0.649,
+              "brier": 0.4464,
+              "wrong_high_conf_rate_080": 0.025,
+              "coverage_at_080": 0.1114,
+              "accuracy_at_080": 0.7755,
+              "aurc": 0.2834
+            },
+            "score": {
+              "n": 240,
+              "acc": 0.3625,
+              "soft_acc": 0.2273,
+              "ece": 0.0777,
+              "act_auroc": 0.4988,
+              "nll": 1.5166,
+              "brier": 0.7608,
+              "wrong_high_conf_rate_080": 0.0042,
+              "coverage_at_080": 0.0042,
+              "accuracy_at_080": 0.0,
+              "aurc": 0.5919,
+              "score_mae": 1.0971,
+              "first_level_rate": 0.1,
+              "first_level_gold_rate": 0.2333
+            }
+          },
+          "by_workflow": {
+            "agent_02.jsonl:claim_triage": {
+              "n": 160,
+              "acc": 0.6312,
+              "soft_acc": 0.4536,
+              "ece": 0.1289,
+              "act_auroc": 0.5583,
+              "nll": 0.9151,
+              "brier": 0.5121,
+              "wrong_high_conf_rate_080": 0.0312,
+              "coverage_at_080": 0.15,
+              "accuracy_at_080": 0.7917,
+              "aurc": 0.2158,
+              "score_mae": 0.7089,
+              "first_level_rate": 0.0,
+              "first_level_gold_rate": 0.225
+            },
+            "agent_04.jsonl:dependency_upgrade_risk": {
+              "n": 160,
+              "acc": 0.5,
+              "soft_acc": 0.3773,
+              "ece": 0.109,
+              "act_auroc": 0.5895,
+              "nll": 1.0646,
+              "brier": 0.5947,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.0,
+              "accuracy_at_080": null,
+              "aurc": 0.3267,
+              "score_mae": 1.0659,
+              "first_level_rate": 0.225,
+              "first_level_gold_rate": 0.225
+            },
+            "agent_06.jsonl:cloud_cost_anomaly_review": {
+              "n": 120,
+              "acc": 0.4083,
+              "soft_acc": 0.3194,
+              "ece": 0.0729,
+              "act_auroc": 0.5778,
+              "nll": 1.2394,
+              "brier": 0.6681,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.0083,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.4642,
+              "score_mae": 0.9532,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.1
+            },
+            "agent_07.jsonl:inbox_triage_assistant": {
+              "n": 160,
+              "acc": 0.375,
+              "soft_acc": 0.3404,
+              "ece": 0.1768,
+              "act_auroc": 0.5463,
+              "nll": 1.3028,
+              "brier": 0.7223,
+              "wrong_high_conf_rate_080": 0.0375,
+              "coverage_at_080": 0.05,
+              "accuracy_at_080": 0.25,
+              "aurc": 0.6225,
+              "score_mae": 1.386,
+              "first_level_rate": 0.075,
+              "first_level_gold_rate": 0.45
+            },
+            "agent_08.jsonl:eng_resume_screen": {
+              "n": 160,
+              "acc": 0.6188,
+              "soft_acc": 0.4157,
+              "ece": 0.1578,
+              "act_auroc": 0.5521,
+              "nll": 0.9573,
+              "brier": 0.5398,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.0187,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.1894,
+              "score_mae": 0.851,
+              "first_level_rate": 0.05,
+              "first_level_gold_rate": 0.1
+            },
+            "agent_10.jsonl:b2b_lead_qualification": {
+              "n": 160,
+              "acc": 0.4688,
+              "soft_acc": 0.3896,
+              "ece": 0.0831,
+              "act_auroc": 0.5299,
+              "nll": 1.1019,
+              "brier": 0.6063,
+              "wrong_high_conf_rate_080": 0.0063,
+              "coverage_at_080": 0.0875,
+              "accuracy_at_080": 0.9286,
+              "aurc": 0.324,
+              "score_mae": 1.6178,
+              "first_level_rate": 0.05,
+              "first_level_gold_rate": 0.3
+            }
+          }
+        },
+        "market_heldout": {
+          "all": {
+            "n": 740,
+            "acc": 0.7892,
+            "soft_acc": 0.5447,
+            "ece": 0.203,
+            "act_auroc": 0.7169,
+            "nll": 0.6741,
+            "brier": 0.3473,
+            "wrong_high_conf_rate_080": 0.0,
+            "coverage_at_080": 0.323,
+            "accuracy_at_080": 1.0,
+            "aurc": 0.0496,
+            "score_mae": 0.8458,
+            "first_level_rate": 0.4649,
+            "first_level_gold_rate": 0.4216
+          },
+          "by_t": {
+            "choice": {
+              "n": 185,
+              "acc": 0.7784,
+              "soft_acc": 0.3827,
+              "ece": 0.3314,
+              "act_auroc": 0.7139,
+              "nll": 0.9153,
+              "brier": 0.4794,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.0,
+              "accuracy_at_080": null,
+              "aurc": 0.0763
+            },
+            "noul": {
+              "n": 370,
+              "acc": 0.9568,
+              "soft_acc": 0.766,
+              "ece": 0.1548,
+              "act_auroc": 0.6995,
+              "nll": 0.2419,
+              "brier": 0.1144,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.6459,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0029
+            },
+            "score": {
+              "n": 185,
+              "acc": 0.4649,
+              "soft_acc": 0.2641,
+              "ece": 0.1709,
+              "act_auroc": 0.6407,
+              "nll": 1.2973,
+              "brier": 0.6811,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.0,
+              "accuracy_at_080": null,
+              "aurc": 0.3739,
+              "score_mae": 0.8458,
+              "first_level_rate": 0.4649,
+              "first_level_gold_rate": 0.4216
+            }
+          },
+          "by_workflow": {
+            "market:m0002": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.5504,
+              "ece": 0.2339,
+              "act_auroc": 0.8594,
+              "nll": 0.642,
+              "brier": 0.3328,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.3,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0386,
+              "score_mae": 0.5167,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.2
+            },
+            "market:m0042": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.5366,
+              "ece": 0.2607,
+              "act_auroc": 0.75,
+              "nll": 0.6864,
+              "brier": 0.3487,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.25,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0479,
+              "score_mae": 0.6513,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.2
+            },
+            "market:m0045": {
+              "n": 20,
+              "acc": 0.75,
+              "soft_acc": 0.5268,
+              "ece": 0.2339,
+              "act_auroc": 0.8533,
+              "nll": 0.7116,
+              "brier": 0.3641,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.3,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0598,
+              "score_mae": 0.2991,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.0
+            },
+            "market:m0069": {
+              "n": 20,
+              "acc": 0.75,
+              "soft_acc": 0.5765,
+              "ece": 0.2489,
+              "act_auroc": 0.8133,
+              "nll": 0.6146,
+              "brier": 0.3105,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.35,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0437,
+              "score_mae": 0.8943,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.4
+            },
+            "market:m0072": {
+              "n": 20,
+              "acc": 0.7,
+              "soft_acc": 0.5164,
+              "ece": 0.241,
+              "act_auroc": 0.8095,
+              "nll": 0.7116,
+              "brier": 0.3708,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.3,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0612,
+              "score_mae": 0.6322,
+              "first_level_rate": 0.4,
+              "first_level_gold_rate": 0.2
+            },
+            "market:m0073": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.5706,
+              "ece": 0.2151,
+              "act_auroc": 0.5469,
+              "nll": 0.623,
+              "brier": 0.3261,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.35,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0547,
+              "score_mae": 0.7065,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.4
+            },
+            "market:m0083": {
+              "n": 20,
+              "acc": 0.85,
+              "soft_acc": 0.5048,
+              "ece": 0.3056,
+              "act_auroc": 0.6275,
+              "nll": 0.739,
+              "brier": 0.3823,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.25,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0466,
+              "score_mae": 0.5938,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.2
+            },
+            "market:m0086": {
+              "n": 20,
+              "acc": 0.7,
+              "soft_acc": 0.5239,
+              "ece": 0.2067,
+              "act_auroc": 0.7857,
+              "nll": 0.7298,
+              "brier": 0.3904,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.3,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0934,
+              "score_mae": 0.9251,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.6
+            },
+            "market:m0087": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.5261,
+              "ece": 0.2958,
+              "act_auroc": 0.7031,
+              "nll": 0.7058,
+              "brier": 0.3671,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.25,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0264,
+              "score_mae": 0.972,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.6
+            },
+            "market:m0096": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.5263,
+              "ece": 0.2641,
+              "act_auroc": 0.75,
+              "nll": 0.7119,
+              "brier": 0.3653,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.3,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0756,
+              "score_mae": 1.0561,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.4
+            },
+            "market:m0104": {
+              "n": 20,
+              "acc": 0.7,
+              "soft_acc": 0.5507,
+              "ece": 0.132,
+              "act_auroc": 0.7976,
+              "nll": 0.7106,
+              "brier": 0.3558,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.4,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0745,
+              "score_mae": 0.854,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.2
+            },
+            "market:m0109": {
+              "n": 20,
+              "acc": 0.65,
+              "soft_acc": 0.5155,
+              "ece": 0.2115,
+              "act_auroc": 0.7802,
+              "nll": 0.7836,
+              "brier": 0.4027,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.35,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0901,
+              "score_mae": 0.5137,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.0
+            },
+            "market:m0139": {
+              "n": 20,
+              "acc": 0.85,
+              "soft_acc": 0.5942,
+              "ece": 0.2954,
+              "act_auroc": 0.8235,
+              "nll": 0.5728,
+              "brier": 0.2889,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.4,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0338,
+              "score_mae": 1.058,
+              "first_level_rate": 0.8,
+              "first_level_gold_rate": 0.8
+            },
+            "market:m0147": {
+              "n": 20,
+              "acc": 0.9,
+              "soft_acc": 0.6046,
+              "ece": 0.2651,
+              "act_auroc": 0.6111,
+              "nll": 0.5411,
+              "brier": 0.2662,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.35,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0191,
+              "score_mae": 0.6896,
+              "first_level_rate": 0.8,
+              "first_level_gold_rate": 0.4
+            },
+            "market:m0152": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.5652,
+              "ece": 0.1989,
+              "act_auroc": 0.7656,
+              "nll": 0.6234,
+              "brier": 0.3143,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.4,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0443,
+              "score_mae": 0.5115,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.2
+            },
+            "market:m0160": {
+              "n": 20,
+              "acc": 0.85,
+              "soft_acc": 0.538,
+              "ece": 0.2785,
+              "act_auroc": 0.8039,
+              "nll": 0.6658,
+              "brier": 0.3465,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.3,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0239,
+              "score_mae": 0.7802,
+              "first_level_rate": 0.4,
+              "first_level_gold_rate": 0.4
+            },
+            "market:m0165": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.535,
+              "ece": 0.2983,
+              "act_auroc": 0.8281,
+              "nll": 0.6808,
+              "brier": 0.3462,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.3,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0295,
+              "score_mae": 0.9329,
+              "first_level_rate": 0.4,
+              "first_level_gold_rate": 0.6
+            },
+            "market:m0167": {
+              "n": 20,
+              "acc": 0.9,
+              "soft_acc": 0.5563,
+              "ece": 0.3336,
+              "act_auroc": 0.8889,
+              "nll": 0.6281,
+              "brier": 0.3175,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.25,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0104,
+              "score_mae": 0.8741,
+              "first_level_rate": 0.4,
+              "first_level_gold_rate": 0.6
+            },
+            "market:m0172": {
+              "n": 20,
+              "acc": 0.9,
+              "soft_acc": 0.563,
+              "ece": 0.3472,
+              "act_auroc": 0.5833,
+              "nll": 0.6345,
+              "brier": 0.33,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.4,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0299,
+              "score_mae": 1.1883,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.8
+            },
+            "market:m0176": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.5502,
+              "ece": 0.2565,
+              "act_auroc": 0.6406,
+              "nll": 0.6601,
+              "brier": 0.3417,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.25,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0634,
+              "score_mae": 0.8745,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.6
+            },
+            "market:m0177": {
+              "n": 20,
+              "acc": 0.85,
+              "soft_acc": 0.576,
+              "ece": 0.2607,
+              "act_auroc": 0.8824,
+              "nll": 0.5888,
+              "brier": 0.2902,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.35,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0185,
+              "score_mae": 1.3266,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 1.0
+            },
+            "market:m0180": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.499,
+              "ece": 0.2649,
+              "act_auroc": 0.6406,
+              "nll": 0.7752,
+              "brier": 0.4005,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.25,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0779,
+              "score_mae": 0.6187,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.0
+            },
+            "market:m0185": {
+              "n": 20,
+              "acc": 0.65,
+              "soft_acc": 0.56,
+              "ece": 0.2093,
+              "act_auroc": 0.8791,
+              "nll": 0.6591,
+              "brier": 0.3396,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.3,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0966,
+              "score_mae": 0.3781,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.0
+            },
+            "market:m0200": {
+              "n": 20,
+              "acc": 0.85,
+              "soft_acc": 0.558,
+              "ece": 0.2753,
+              "act_auroc": 0.6667,
+              "nll": 0.6596,
+              "brier": 0.3322,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.45,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0339,
+              "score_mae": 1.1574,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.6
+            },
+            "market:m0209": {
+              "n": 20,
+              "acc": 0.75,
+              "soft_acc": 0.5042,
+              "ece": 0.2637,
+              "act_auroc": 0.8267,
+              "nll": 0.7492,
+              "brier": 0.3943,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.25,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0992,
+              "score_mae": 0.6893,
+              "first_level_rate": 0.4,
+              "first_level_gold_rate": 0.2
+            },
+            "market:m0210": {
+              "n": 20,
+              "acc": 0.75,
+              "soft_acc": 0.5651,
+              "ece": 0.1701,
+              "act_auroc": 0.7733,
+              "nll": 0.6469,
+              "brier": 0.3457,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.4,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.1102,
+              "score_mae": 0.824,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.4
+            },
+            "market:m0211": {
+              "n": 20,
+              "acc": 0.9,
+              "soft_acc": 0.5839,
+              "ece": 0.3068,
+              "act_auroc": 0.5556,
+              "nll": 0.5782,
+              "brier": 0.2866,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.35,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0076,
+              "score_mae": 1.1962,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.8
+            },
+            "market:m0212": {
+              "n": 20,
+              "acc": 0.75,
+              "soft_acc": 0.5137,
+              "ece": 0.314,
+              "act_auroc": 0.8667,
+              "nll": 0.7527,
+              "brier": 0.3876,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.3,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0724,
+              "score_mae": 0.9405,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.2
+            },
+            "market:m0213": {
+              "n": 20,
+              "acc": 0.75,
+              "soft_acc": 0.5533,
+              "ece": 0.2587,
+              "act_auroc": 0.7467,
+              "nll": 0.6632,
+              "brier": 0.3391,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.35,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0641,
+              "score_mae": 1.1419,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.6
+            },
+            "market:m0223": {
+              "n": 20,
+              "acc": 0.85,
+              "soft_acc": 0.5366,
+              "ece": 0.2659,
+              "act_auroc": 0.7255,
+              "nll": 0.6894,
+              "brier": 0.3472,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.35,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0244,
+              "score_mae": 0.8144,
+              "first_level_rate": 0.6,
+              "first_level_gold_rate": 0.4
+            },
+            "market:m0225": {
+              "n": 20,
+              "acc": 0.9,
+              "soft_acc": 0.588,
+              "ece": 0.3029,
+              "act_auroc": 0.9444,
+              "nll": 0.5879,
+              "brier": 0.2974,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.45,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0198,
+              "score_mae": 0.9971,
+              "first_level_rate": 0.8,
+              "first_level_gold_rate": 0.8
+            },
+            "market:m0247": {
+              "n": 20,
+              "acc": 0.65,
+              "soft_acc": 0.5859,
+              "ece": 0.2206,
+              "act_auroc": 0.978,
+              "nll": 0.6223,
+              "brier": 0.3201,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.4,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0824,
+              "score_mae": 0.4557,
+              "first_level_rate": 0.8,
+              "first_level_gold_rate": 0.0
+            },
+            "market:m0260": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.5205,
+              "ece": 0.3045,
+              "act_auroc": 0.9062,
+              "nll": 0.7414,
+              "brier": 0.3948,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.25,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0458,
+              "score_mae": 1.2216,
+              "first_level_rate": 0.4,
+              "first_level_gold_rate": 0.8
+            },
+            "market:m0262": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.5306,
+              "ece": 0.265,
+              "act_auroc": 0.7969,
+              "nll": 0.6964,
+              "brier": 0.3707,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.25,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0631,
+              "score_mae": 0.9951,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.6
+            },
+            "market:m0266": {
+              "n": 20,
+              "acc": 0.7,
+              "soft_acc": 0.4994,
+              "ece": 0.2709,
+              "act_auroc": 0.7381,
+              "nll": 0.7424,
+              "brier": 0.3983,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.3,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.1014,
+              "score_mae": 0.9359,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.4
+            },
+            "market:m0280": {
+              "n": 20,
+              "acc": 0.75,
+              "soft_acc": 0.5163,
+              "ece": 0.254,
+              "act_auroc": 0.7467,
+              "nll": 0.715,
+              "brier": 0.363,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.25,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0404,
+              "score_mae": 1.1911,
+              "first_level_rate": 0.2,
+              "first_level_gold_rate": 0.4
+            },
+            "market:m0296": {
+              "n": 20,
+              "acc": 0.8,
+              "soft_acc": 0.533,
+              "ece": 0.294,
+              "act_auroc": 0.9219,
+              "nll": 0.698,
+              "brier": 0.3752,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.35,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0905,
+              "score_mae": 0.8857,
+              "first_level_rate": 0.4,
+              "first_level_gold_rate": 0.6
+            }
+          }
+        },
+        "hans_formats": {
+          "all": {
+            "n": 6000,
+            "acc": 0.9987,
+            "soft_acc": 0.988,
+            "ece": 0.0101,
+            "act_auroc": 0.6227,
+            "nll": 0.0138,
+            "brier": 0.0043,
+            "wrong_high_conf_rate_080": 0.0003,
+            "coverage_at_080": 0.9912,
+            "accuracy_at_080": 0.9997,
+            "aurc": 0.0
+          },
+          "by_t": {
+            "choice": {
+              "n": 4500,
+              "acc": 0.9982,
+              "soft_acc": 0.9861,
+              "ece": 0.0113,
+              "act_auroc": 0.683,
+              "nll": 0.0161,
+              "brier": 0.0052,
+              "wrong_high_conf_rate_080": 0.0004,
+              "coverage_at_080": 0.9891,
+              "accuracy_at_080": 0.9996,
+              "aurc": 0.0
+            },
+            "noul": {
+              "n": 1500,
+              "acc": 1.0,
+              "soft_acc": 0.9936,
+              "ece": 0.0064,
+              "act_auroc": NaN,
+              "nll": 0.0069,
+              "brier": 0.0016,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9973,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            }
+          },
+          "by_workflow": {
+            "descriptive:ent:constituent": {
+              "n": 246,
+              "acc": 0.9959,
+              "soft_acc": 0.962,
+              "ece": 0.0316,
+              "act_auroc": 0.6612,
+              "nll": 0.0459,
+              "brier": 0.0199,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9472,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0002
+            },
+            "descriptive:ent:lexical_overlap": {
+              "n": 240,
+              "acc": 0.9958,
+              "soft_acc": 0.9801,
+              "ece": 0.016,
+              "act_auroc": 0.9916,
+              "nll": 0.0252,
+              "brier": 0.0106,
+              "wrong_high_conf_rate_080": 0.0042,
+              "coverage_at_080": 0.9875,
+              "accuracy_at_080": 0.9958,
+              "aurc": 0.0001
+            },
+            "descriptive:ent:subsequence": {
+              "n": 249,
+              "acc": 1.0,
+              "soft_acc": 0.991,
+              "ece": 0.009,
+              "act_auroc": NaN,
+              "nll": 0.0092,
+              "brier": 0.0007,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 1.0,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "descriptive:non:constituent": {
+              "n": 255,
+              "acc": 1.0,
+              "soft_acc": 0.9849,
+              "ece": 0.0151,
+              "act_auroc": NaN,
+              "nll": 0.0155,
+              "brier": 0.0013,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 1.0,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "descriptive:non:lexical_overlap": {
+              "n": 281,
+              "acc": 1.0,
+              "soft_acc": 0.9874,
+              "ece": 0.0126,
+              "act_auroc": NaN,
+              "nll": 0.0132,
+              "brier": 0.0023,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9964,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "descriptive:non:subsequence": {
+              "n": 229,
+              "acc": 1.0,
+              "soft_acc": 0.9799,
+              "ece": 0.0201,
+              "act_auroc": NaN,
+              "nll": 0.0223,
+              "brier": 0.0067,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9738,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "descriptive_rev:ent:constituent": {
+              "n": 246,
+              "acc": 0.9919,
+              "soft_acc": 0.9817,
+              "ece": 0.0158,
+              "act_auroc": 0.9488,
+              "nll": 0.0233,
+              "brier": 0.0114,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9756,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0001
+            },
+            "descriptive_rev:ent:lexical_overlap": {
+              "n": 240,
+              "acc": 0.9958,
+              "soft_acc": 0.9893,
+              "ece": 0.009,
+              "act_auroc": 0.9958,
+              "nll": 0.0147,
+              "brier": 0.0077,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9833,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0001
+            },
+            "descriptive_rev:ent:subsequence": {
+              "n": 249,
+              "acc": 1.0,
+              "soft_acc": 0.9937,
+              "ece": 0.0063,
+              "act_auroc": NaN,
+              "nll": 0.0066,
+              "brier": 0.0008,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.996,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "descriptive_rev:non:constituent": {
+              "n": 255,
+              "acc": 1.0,
+              "soft_acc": 0.9911,
+              "ece": 0.0089,
+              "act_auroc": NaN,
+              "nll": 0.0091,
+              "brier": 0.0007,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 1.0,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "descriptive_rev:non:lexical_overlap": {
+              "n": 281,
+              "acc": 0.9964,
+              "soft_acc": 0.981,
+              "ece": 0.0126,
+              "act_auroc": 0.0,
+              "nll": 0.025,
+              "brier": 0.0099,
+              "wrong_high_conf_rate_080": 0.0036,
+              "coverage_at_080": 0.9893,
+              "accuracy_at_080": 0.9964,
+              "aurc": 0.0002
+            },
+            "descriptive_rev:non:subsequence": {
+              "n": 229,
+              "acc": 0.9956,
+              "soft_acc": 0.9743,
+              "ece": 0.0227,
+              "act_auroc": 0.8596,
+              "nll": 0.0295,
+              "brier": 0.0108,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9694,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "neutral:ent:constituent": {
+              "n": 246,
+              "acc": 1.0,
+              "soft_acc": 0.9926,
+              "ece": 0.0074,
+              "act_auroc": NaN,
+              "nll": 0.0076,
+              "brier": 0.0008,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 1.0,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "neutral:ent:lexical_overlap": {
+              "n": 240,
+              "acc": 1.0,
+              "soft_acc": 0.9966,
+              "ece": 0.0034,
+              "act_auroc": NaN,
+              "nll": 0.0034,
+              "brier": 0.0001,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 1.0,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "neutral:ent:subsequence": {
+              "n": 249,
+              "acc": 1.0,
+              "soft_acc": 0.9955,
+              "ece": 0.0045,
+              "act_auroc": NaN,
+              "nll": 0.0045,
+              "brier": 0.0001,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 1.0,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "neutral:non:constituent": {
+              "n": 255,
+              "acc": 1.0,
+              "soft_acc": 0.986,
+              "ece": 0.014,
+              "act_auroc": NaN,
+              "nll": 0.0144,
+              "brier": 0.0017,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 1.0,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "neutral:non:lexical_overlap": {
+              "n": 281,
+              "acc": 0.9964,
+              "soft_acc": 0.9899,
+              "ece": 0.0069,
+              "act_auroc": 0.0143,
+              "nll": 0.0126,
+              "brier": 0.0069,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9858,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "neutral:non:subsequence": {
+              "n": 229,
+              "acc": 1.0,
+              "soft_acc": 0.9923,
+              "ece": 0.0077,
+              "act_auroc": NaN,
+              "nll": 0.0084,
+              "brier": 0.0022,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9956,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "noul:ent:constituent": {
+              "n": 246,
+              "acc": 1.0,
+              "soft_acc": 0.9942,
+              "ece": 0.0058,
+              "act_auroc": NaN,
+              "nll": 0.006,
+              "brier": 0.0009,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 1.0,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "noul:ent:lexical_overlap": {
+              "n": 240,
+              "acc": 1.0,
+              "soft_acc": 0.9974,
+              "ece": 0.0026,
+              "act_auroc": NaN,
+              "nll": 0.0028,
+              "brier": 0.0005,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9958,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "noul:ent:subsequence": {
+              "n": 249,
+              "acc": 1.0,
+              "soft_acc": 0.9973,
+              "ece": 0.0027,
+              "act_auroc": NaN,
+              "nll": 0.0027,
+              "brier": 0.0001,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 1.0,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "noul:non:constituent": {
+              "n": 255,
+              "acc": 1.0,
+              "soft_acc": 0.9892,
+              "ece": 0.0108,
+              "act_auroc": NaN,
+              "nll": 0.0111,
+              "brier": 0.0012,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 1.0,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "noul:non:lexical_overlap": {
+              "n": 281,
+              "acc": 1.0,
+              "soft_acc": 0.9953,
+              "ece": 0.0047,
+              "act_auroc": NaN,
+              "nll": 0.0058,
+              "brier": 0.0031,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9929,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            },
+            "noul:non:subsequence": {
+              "n": 229,
+              "acc": 1.0,
+              "soft_acc": 0.9877,
+              "ece": 0.0123,
+              "act_auroc": NaN,
+              "nll": 0.0133,
+              "brier": 0.0034,
+              "wrong_high_conf_rate_080": 0.0,
+              "coverage_at_080": 0.9956,
+              "accuracy_at_080": 1.0,
+              "aurc": 0.0
+            }
+          }
+        },
+        "uncertainty": {
+          "all": {
+            "n": 1200,
+            "mean_conf": 0.4588,
+            "p95_conf": 0.6966,
+            "high_conf_rate_075": 0.0367,
+            "mean_act": 0.1307,
+            "p95_act": 0.2542
+          },
+          "by_t": {
+            "choice": {
+              "n": 400,
+              "mean_conf": 0.5743,
+              "p95_conf": 0.6825,
+              "high_conf_rate_075": 0.0,
+              "mean_act": 0.1491,
+              "p95_act": 0.2223
+            },
+            "noul": {
+              "n": 400,
+              "mean_conf": 0.5834,
+              "p95_conf": 0.7979,
+              "high_conf_rate_075": 0.11,
+              "mean_act": 0.1982,
+              "p95_act": 0.4142
+            },
+            "score": {
+              "n": 400,
+              "mean_conf": 0.2187,
+              "p95_conf": 0.2405,
+              "high_conf_rate_075": 0.0,
+              "mean_act": 0.0447,
+              "p95_act": 0.07
+            }
+          }
+        },
+        "val": {
+          "all": {
+            "n": 3599,
+            "acc": 0.7041,
+            "soft_acc": 0.6196,
+            "ece": 0.0306,
+            "act_auroc": 0.752,
+            "nll": 0.6882,
+            "brier": 0.3766,
+            "wrong_high_conf_rate_080": 0.0167,
+            "coverage_at_080": 0.4193,
+            "accuracy_at_080": 0.9602,
+            "aurc": 0.0986,
+            "score_mae": 0.6004,
+            "first_level_rate": 0.2333,
+            "first_level_gold_rate": 0.2458
+          },
+          "by_t": {
+            "choice": {
+              "n": 2892,
+              "acc": 0.686,
+              "soft_acc": 0.6043,
+              "ece": 0.0276,
+              "act_auroc": 0.7781,
+              "nll": 0.7244,
+              "brier": 0.394,
+              "wrong_high_conf_rate_080": 0.0159,
+              "coverage_at_080": 0.4011,
+              "accuracy_at_080": 0.9603,
+              "aurc": 0.1074
+            },
+            "noul": {
+              "n": 467,
+              "acc": 0.8887,
+              "soft_acc": 0.8185,
+              "ece": 0.0405,
+              "act_auroc": 0.6747,
+              "nll": 0.2829,
+              "brier": 0.169,
+              "wrong_high_conf_rate_080": 0.0257,
+              "coverage_at_080": 0.6981,
+              "accuracy_at_080": 0.9632,
+              "aurc": 0.0294
+            },
+            "score": {
+              "n": 240,
+              "acc": 0.5625,
+              "soft_acc": 0.4172,
+              "ece": 0.104,
+              "act_auroc": 0.6484,
+              "nll": 1.0403,
+              "brier": 0.5703,
+              "wrong_high_conf_rate_080": 0.0083,
+              "coverage_at_080": 0.0958,
+              "accuracy_at_080": 0.913,
+              "aurc": 0.3017,
+              "score_mae": 0.6004,
+              "first_level_rate": 0.2333,
+              "first_level_gold_rate": 0.2458
+            }
+          }
+        },
+        "emotion": {
+          "all": {
+            "n": 1000,
+            "acc": 0.566,
+            "soft_acc": 0.4498,
+            "ece": 0.0971,
+            "act_auroc": 0.6669,
+            "nll": 1.2737,
+            "brier": 0.6093,
+            "wrong_high_conf_rate_080": 0.08,
+            "coverage_at_080": 0.277,
+            "accuracy_at_080": 0.7112,
+            "aurc": 0.3125
+          }
+        },
+        "sst5": {
+          "all": {
+            "n": 2210,
+            "acc": 0.4484,
+            "soft_acc": 0.3191,
+            "ece": 0.0742,
+            "act_auroc": 0.6379,
+            "nll": 1.2458,
+            "brier": 0.6661,
+            "wrong_high_conf_rate_080": 0.0059,
+            "coverage_at_080": 0.0195,
+            "accuracy_at_080": 0.6977,
+            "aurc": 0.4583,
+            "score_mae": 0.695,
+            "first_level_rate": 0.1484,
+            "first_level_gold_rate": 0.1262
+          }
+        },
+        "xcopa": {
+          "all": {
+            "n": 1100,
+            "acc": 0.5909,
+            "soft_acc": 0.5436,
+            "ece": 0.0794,
+            "act_auroc": 0.5697,
+            "nll": 0.6966,
+            "brier": 0.4931,
+            "wrong_high_conf_rate_080": 0.04,
+            "coverage_at_080": 0.1545,
+            "accuracy_at_080": 0.7412,
+            "aurc": 0.3435
+          }
+        },
+        "xwinograd": {
+          "all": {
+            "n": 4442,
+            "acc": 0.6294,
+            "soft_acc": 0.5699,
+            "ece": 0.0502,
+            "act_auroc": 0.5835,
+            "nll": 0.6573,
+            "brier": 0.4585,
+            "wrong_high_conf_rate_080": 0.0412,
+            "coverage_at_080": 0.1918,
+            "accuracy_at_080": 0.7852,
+            "aurc": 0.2804
+          }
+        },
+        "belebele": {
+          "all": {
+            "n": 2091,
+            "acc": 0.5538,
+            "soft_acc": 0.4558,
+            "ece": 0.0547,
+            "act_auroc": 0.6739,
+            "nll": 1.0786,
+            "brier": 0.5695,
+            "wrong_high_conf_rate_080": 0.0378,
+            "coverage_at_080": 0.2396,
+            "accuracy_at_080": 0.8423,
+            "aurc": 0.265
+          }
+        },
+        "xstory": {
+          "all": {
+            "n": 1649,
+            "acc": 0.7095,
+            "soft_acc": 0.635,
+            "ece": 0.023,
+            "act_auroc": 0.6878,
+            "nll": 0.5465,
+            "brier": 0.3715,
+            "wrong_high_conf_rate_080": 0.0376,
+            "coverage_at_080": 0.319,
+            "accuracy_at_080": 0.8821,
+            "aurc": 0.1611
+          }
+        },
+        "wd_heldout": {
+          "all": {
+            "n": 3377,
+            "acc": 0.9094,
+            "soft_acc": 0.8751,
+            "ece": 0.0178,
+            "act_auroc": 0.8559,
+            "nll": 0.2064,
+            "brier": 0.1199,
+            "wrong_high_conf_rate_080": 0.0092,
+            "coverage_at_080": 0.7909,
+            "accuracy_at_080": 0.9884,
+            "aurc": 0.0095
+          },
+          "by_t": {
+            "choice": {
+              "n": 2838,
+              "acc": 0.9084,
+              "soft_acc": 0.8806,
+              "ece": 0.0125,
+              "act_auroc": 0.9007,
+              "nll": 0.2047,
+              "brier": 0.1167,
+              "wrong_high_conf_rate_080": 0.0099,
+              "coverage_at_080": 0.8132,
+              "accuracy_at_080": 0.9879,
+              "aurc": 0.0088
+            },
+            "noul": {
+              "n": 539,
+              "acc": 0.9147,
+              "soft_acc": 0.8458,
+              "ece": 0.0528,
+              "act_auroc": 0.7397,
+              "nll": 0.215,
+              "brier": 0.1365,
+              "wrong_high_conf_rate_080": 0.0056,
+              "coverage_at_080": 0.6735,
+              "accuracy_at_080": 0.9917,
+              "aurc": 0.0134
+            }
+          }
+        },
+        "wiki_heldout": {
+          "all": {
+            "n": 1500,
+            "acc": 0.9147,
+            "soft_acc": 0.8845,
+            "ece": 0.0147,
+            "act_auroc": 0.8152,
+            "nll": 0.2137,
+            "brier": 0.1172,
+            "wrong_high_conf_rate_080": 0.0193,
+            "coverage_at_080": 0.8273,
+            "accuracy_at_080": 0.9766,
+            "aurc": 0.0107
+          },
+          "by_t": {
+            "choice": {
+              "n": 1361,
+              "acc": 0.9184,
+              "soft_acc": 0.89,
+              "ece": 0.0144,
+              "act_auroc": 0.8354,
+              "nll": 0.2091,
+              "brier": 0.1135,
+              "wrong_high_conf_rate_080": 0.0198,
+              "coverage_at_080": 0.8442,
+              "accuracy_at_080": 0.9765,
+              "aurc": 0.0096
+            },
+            "noul": {
+              "n": 139,
+              "acc": 0.8777,
+              "soft_acc": 0.8306,
+              "ece": 0.0783,
+              "act_auroc": 0.8742,
+              "nll": 0.2582,
+              "brier": 0.1528,
+              "wrong_high_conf_rate_080": 0.0144,
+              "coverage_at_080": 0.6619,
+              "accuracy_at_080": 0.9783,
+              "aurc": 0.0236
+            }
+          }
+        }
+      }
+    }
+  }
+}

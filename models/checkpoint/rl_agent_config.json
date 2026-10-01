@@ -1,0 +1,25 @@
+{
+  "act_costs": {
+    "escalate": 0.5
+  },
+  "amp_dtype": "bf16",
+  "cost_wrong_act": 3.0,
+  "encoder": "jhu-clsp/mmBERT-base",
+  "head_layers": 2,
+  "head_max_len": 256,
+  "max_len": 1024,
+  "max_prefixes": 6,
+  "model_name": "xDecision",
+  "temperature": [
+    1.8352,
+    2.1167,
+    1.6012
+  ],
+  "temperature_by_options": {
+    "choice:2": 1.819,
+    "choice:3-5": 1.8945,
+    "choice:6-10": 1.774,
+    "noul:2": 1.6012,
+    "score:3-5": 2.1167
+  }
+}

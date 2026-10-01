@@ -1,0 +1,18 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "xdecision"
+version = "0.1.0"
+description = "Multilingual structured decisions with self-contained GGUF artifacts"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+dependencies = ["laya==0.3.21", "torch>=2.6", "transformers>=5.0", "numpy>=2", "safetensors>=0.5", "gguf>=0.19,<1"]
+
+[project.optional-dependencies]
+apple = ["mlx>=0.30"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xdecision"]
