@@ -2,9 +2,11 @@
 import math
 from collections import defaultdict
 
+MIN_GROUP, MAX_GROUP = 6, 16
+
 
 def add_recipe_arguments(parser):
-    parser.add_argument('--equiv', default=None, help='tokenized six/eight-view equivalence groups')
+    parser.add_argument('--equiv', default=None, help='tokenized equivalence groups of 6-16 views')
     parser.add_argument('--equiv-every', type=int, default=3, help='one grouped batch per N micro-batches')
     parser.add_argument('--w-consistency', type=float, default=0.0)
     parser.add_argument('--w-uncertain', type=float, default=0.0)
@@ -40,8 +42,8 @@ def grouped_batches(items, max_tokens, max_items, rng):
         if type(item.get('support_flip')) is not bool:
             raise ValueError('support_flip must be explicit boolean')
         groups[gid].append(index)
-    if not groups or any(len(g) not in (6, 8) for g in groups.values()):
-        raise ValueError('every equivalence group must have six or eight views')
+    if not groups or any(not MIN_GROUP <= len(g) <= MAX_GROUP for g in groups.values()):
+        raise ValueError(f'every equivalence group must have {MIN_GROUP} to {MAX_GROUP} views')
     by_len = defaultdict(list)
     for indices in groups.values():
         if {items[i]['qtype'] for i in indices} != {0, 1, 2}:

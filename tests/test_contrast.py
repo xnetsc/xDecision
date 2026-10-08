@@ -1,10 +1,14 @@
+import json
+import random
 import unittest
 
 import torch
 
 from xdecision import train
 from xdecision.contrast import aligned_support, claim_views, comparison_views
-from xdecision.probes import _cases, summarize
+from xdecision.contrast_data import generate
+from xdecision.probes import CLAIMS as PROBE_CLAIMS, PAIRS, PROBE_ENTITIES, _cases, summarize
+from xdecision.training_recipe import grouped_batches
 
 
 def encoded(views):
@@ -47,6 +51,26 @@ class ContrastViews(unittest.TestCase):
         summary = summarize(rows)
         self.assertEqual(summary['suitability_context']['view_accuracy'], 1.0)
         self.assertEqual(summary['suitability_context']['fact_order_flip_rate'], 0.0)
+
+
+class GeneratedData(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.groups, cls.items = generate(40, 20, 30, 10, 3)
+
+    def test_groups_pass_trainer_validation(self):
+        rows = [dict(r, ids=[1]*8, markers=list(range(len(r['target']))),
+                     qtype={'choice': 0, 'score': 1, 'noul': 2}[r['question']['type']]) for r in self.groups]
+        batches = grouped_batches(rows, 4096, 16, random.Random(0))
+        self.assertEqual(sorted(i for b in batches for i in b), list(range(len(rows))))
+
+    def test_training_data_is_disjoint_from_probes(self):
+        text = json.dumps(self.groups + self.items, ensure_ascii=False)
+        tasks = [t for _, _, _, task, _ in PAIRS for t in task]
+        # The claim subject with its trailing space, e.g. '会议 ' or 'Meeting '.
+        claims = [c.split('{e}')[0] for _, claim, *_ in PROBE_CLAIMS for c in claim]
+        for word in sorted(PROBE_ENTITIES) + tasks + claims:
+            self.assertNotIn(word, text)
 
 
 if __name__ == '__main__':
