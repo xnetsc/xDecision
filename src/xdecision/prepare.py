@@ -9,13 +9,15 @@ from .model_io import load_config, load_tokenizer
 
 
 def prepare(path, checkpoint):
-    cfg = load_config(checkpoint)
-    tok = load_tokenizer(checkpoint)
+    records = ((number, json.loads(text)) for number, text in enumerate(Path(path).read_text().splitlines(), 1)
+               if text.strip())
+    return encode_records(records, load_config(checkpoint), load_tokenizer(checkpoint))
+
+
+def encode_records(records, cfg, tok):
+    """Validate and tokenize (line number, record) pairs."""
     rows = []
-    for number, text in enumerate(Path(path).read_text().splitlines(), 1):
-        if not text.strip():
-            continue
-        row = json.loads(text)
+    for number, row in records:
         q = row['question']
         kind = q['type']
         if kind not in QTYPES:

@@ -265,6 +265,26 @@
       "redistributed": true,
       "attribution": "xDecision task data",
       "license": "Apache-2.0"
+    },
+    "contrast_compare": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "contrast_claim": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "contrast_feasibility": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
+    },
+    "contrast_most_suitable": {
+      "redistributed": true,
+      "attribution": "xDecision task data",
+      "license": "Apache-2.0"
     }
   },
   "splits": {
@@ -652,6 +672,30 @@
         "amazon_stars": 240
       },
       "sha256": "b3bf2a2f530edf28ffaf5868534d5fb84d6314d0c12a48c7c67431902823f9a7"
+    },
+    "train/contrast_groups.jsonl.gz": {
+      "original_rows": 64800,
+      "included_rows": 64800,
+      "included_sources": {
+        "contrast_compare": 43200,
+        "contrast_claim": 21600
+      },
+      "omitted_sources": {},
+      "sha256": "f2dc43d40d5e519ee2e17359331edfbfb44b2bc7ae33695f40fa67264489ef49",
+      "text_source": "source/contrast_groups.jsonl.gz",
+      "generator": "python -m xdecision.contrast_data --checkpoint models/checkpoint --out-dir data"
+    },
+    "train/contrast_items.jsonl.gz": {
+      "original_rows": 21118,
+      "included_rows": 21118,
+      "included_sources": {
+        "contrast_feasibility": 19518,
+        "contrast_most_suitable": 1600
+      },
+      "omitted_sources": {},
+      "sha256": "1fa450931e431711f42a39a0ff16ed2ba33f6d815102119656be2fa80efcdbec",
+      "text_source": "source/contrast_items.jsonl.gz",
+      "generator": "python -m xdecision.contrast_data --checkpoint models/checkpoint --out-dir data"
     }
   }
 }
