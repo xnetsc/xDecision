@@ -1,4 +1,4 @@
-"""Post-train a checkpoint on tokenized decision items using CUDA, MPS or CPU.
+"""Post-train a checkpoint on tokenized decision items on CUDA, ROCm, XPU, MPS, MLX or CPU.
 
 Loss per question (all on the model's own option-marker logits):
   * soft cross-entropy against the gold distribution            (what moves accuracy)
@@ -24,8 +24,8 @@ import torch
 from laya.common import proper_reward
 
 from .model_io import DEFAULT_BASE, load_model, load_tokenizer, save_checkpoint
-from .devices import (pick_device, pick_precision, autocast_context, synchronize,
-                      memory_stats, device_info)
+from .devices import (pick_backend, pick_device, pick_precision, autocast_context, synchronize,
+                      memory_stats, device_info, mlx_report, cpu_report)
 from .training_recipe import add_recipe_arguments, validate_recipe, grouped_batches, recipe_metadata
 
 QTYPE_SCORE = 1
@@ -202,7 +202,36 @@ def param_groups(model, lr_enc, lr_head, wd):
     return out, frozen
 
 
-def main():
+# Options both trainers accept; the rest are PyTorch-only.
+SHARED_OPTIONS = ("base", "train", "out", "epochs", "max_tokens", "max_items", "lr_enc", "lr_head", "wd",
+                  "warmup", "sigma_start", "sigma_end", "save_every", "bench", "seed", "equiv",
+                  "equiv_every", "w_consistency", "w_uncertain", "w_overconf", "w_selective")
+
+
+def run_mlx(args):
+    """Hand the shared options to mlx_train, which implements the same objective in MLX."""
+    notes = []
+    if args.accum != 1:
+        notes.append(f"--accum {args.accum} ignored: the MLX trainer updates after every micro-batch")
+    if args.grad_ckpt:
+        notes.append("--grad-ckpt ignored: not implemented by the MLX trainer")
+    if args.precision != "auto":
+        notes.append("--precision ignored: MLX trains FP32 parameters with BF16 matmuls")
+    print(json.dumps({"backend": "mlx", "mlx": mlx_report(), "cpu": cpu_report(), "notes": notes}), flush=True)
+    if args.dry_run:
+        return
+    argv = []
+    for name in SHARED_OPTIONS:
+        value = getattr(args, name)
+        if value is not None:
+            argv += ["--" + name.replace("_", "-"), str(value)]
+    if args.reset_act_head:
+        argv.append("--reset-act-head")
+    from . import mlx_train
+    mlx_train.main(argv)
+
+
+def main(argv=None):
     ap = argparse.ArgumentParser(fromfile_prefix_chars='@')
     ap.add_argument("--base", default=DEFAULT_BASE)
     ap.add_argument("--reset-act-head", action="store_true", help="Explicitly reinitialize the action head")
@@ -220,13 +249,18 @@ def main():
     ap.add_argument("--sigma-end", type=float, default=0.1)
     ap.add_argument("--save-every", type=int, default=1500, help="optimizer steps between rolling saves")
     ap.add_argument("--bench", type=int, default=0, help="run N micro-batches, report throughput, exit")
-    ap.add_argument("--device", default="auto", help="auto, cuda[:index], mps or cpu")
+    ap.add_argument("--backend", default="auto", choices=["auto", "torch", "mlx"],
+                    help="auto: PyTorch CUDA/ROCm/XPU, else an MLX GPU, else PyTorch MPS/CPU")
+    ap.add_argument("--device", default="auto", help="PyTorch device: auto, cuda[:index] (NVIDIA or ROCm), "
+                    "xpu[:index], mps or cpu")
     ap.add_argument("--precision", choices=["auto", "fp32", "bf16", "fp16"], default="auto")
     ap.add_argument("--dry-run", action="store_true", help="Print selected hardware without loading data/model")
     ap.add_argument("--grad-ckpt", action="store_true")
     ap.add_argument("--seed", type=int, default=20260928)
     add_recipe_arguments(ap)
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
+    if pick_backend(args.backend, args.device) == "mlx":
+        return run_mlx(args)
 
     torch.manual_seed(args.seed)
     rng = random.Random(args.seed)
@@ -246,6 +280,8 @@ def main():
     if device.type == "cuda":
         torch.cuda.set_device(device)
         torch.cuda.reset_peak_memory_stats(device)
+    elif device.type == "xpu":
+        torch.xpu.set_device(device)
     tok = load_tokenizer(args.base)
     model, cfg = load_model(args.base, device)
     # Every updated checkpoint, including rolling saves, needs fresh calibration.

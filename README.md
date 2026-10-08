@@ -29,7 +29,7 @@ xDecision is a multilingual structured decision model with approximately 322M pa
 - `score`: assign a score on an ordered scale.
 - Returns candidate probabilities and an act/escalate recommendation.
 
-The release includes the original checkpoint, F16/Q8_0 GGUF files, redistributable training data, and continued-training code for CUDA, Apple MPS, and CPU. Apple Silicon also has a native MLX inference backend.
+The release includes the original checkpoint, F16/Q8_0 GGUF files, redistributable training data, and continued-training code for NVIDIA CUDA, AMD ROCm, Intel XPU, Apple MPS/MLX, and x86/ARM/other CPUs. Apple Silicon also has a native MLX inference backend.
 
 ### Intended use
 
@@ -186,14 +186,18 @@ python -m xdecision.gguf_io verify --checkpoint work/continued/final --gguf work
 
 ### Device selection
 
-Automatic priority is **CUDA → MPS → CPU**. With multiple CUDA GPUs, the device with the most free memory at startup is selected. Use `CUDA_VISIBLE_DEVICES` to limit eligible devices or `--device cuda:0` to select one explicitly. Evaluation and calibration use FP32.
+Automatic priority is **CUDA/ROCm → Intel XPU → MLX GPU → MPS → CPU**. Nothing about the host is assumed: `python -m xdecision.devices` prints the CPU architecture (x86, ARM or other) with the instruction sets the operating system reports, the GPU runtime (NVIDIA CUDA, AMD ROCm, Intel XPU, Apple MPS, MLX on Metal or CUDA), and the backend, device and precision that training would use. When MLX is selected, `xdecision.train` passes the shared options to `xdecision.mlx_train`; `--backend torch` or an explicit `--device` keeps PyTorch. With multiple CUDA GPUs, the device with the most free memory at startup is selected. Use `CUDA_VISIBLE_DEVICES` to limit eligible devices or `--device cuda:0` to select one explicitly. Evaluation and calibration use FP32.
 
 | Training device | Automatic precision |
 |---|---|
-| CUDA GPU with native BF16 support | BF16 |
-| Other CUDA GPUs | FP16 + GradScaler |
+| CUDA or ROCm GPU with native BF16 support | BF16 |
+| Other CUDA/ROCm GPUs | FP16 + GradScaler |
+| Intel XPU with BF16 support | BF16 |
 | Apple MPS on macOS 14+ | BF16 |
-| Older MPS / CPU | FP32 |
+| CPU whose instruction set reports BF16 (x86 AVX512-BF16/AMX, ARM BF16) and passes a timing probe | BF16 |
+| Older MPS / other XPU / other CPUs | FP32 |
+
+The CPU probe times a transformer-sized matmul under BF16 and FP32 once per process and keeps BF16 only if it agrees with FP32 and takes under 80% of the FP32 time; when the instruction set cannot be read, the probe alone decides.
 
 Override precision with `--precision fp32`. To reduce memory usage, lower `--max-tokens` / `--max-items` and enable `--grad-ckpt`; use `--accum` to increase the effective batch size. Logs report device, precision, and memory usage. Training steps were verified on CPU/MPS. CUDA selection branches passed tests; validation on physical NVIDIA hardware remains pending.
 
@@ -218,7 +222,7 @@ Code and model are released under Apache-2.0, with the upstream mmBERT-base MIT 
 - `score`：在有序刻度上评分。
 - 输出选项概率及 act/escalate 执行建议。
 
-提供原始 checkpoint、F16/Q8_0 GGUF、可分发训练数据和续训代码，支持 CUDA、Apple MPS、CPU；Apple Silicon 另有原生 MLX 推理后端。
+提供原始 checkpoint、F16/Q8_0 GGUF、可分发训练数据和续训代码，支持 NVIDIA CUDA、AMD ROCm、Intel XPU、Apple MPS/MLX 及 x86/ARM/其它架构 CPU；Apple Silicon 另有原生 MLX 推理后端。
 
 ### 适用场景
 
@@ -375,14 +379,18 @@ python -m xdecision.gguf_io verify --checkpoint work/continued/final --gguf work
 
 ### 设备选择
 
-默认优先 **CUDA → MPS → CPU**。多张 CUDA 卡按启动时空闲显存选一张，可通过 `CUDA_VISIBLE_DEVICES` 限定范围或 `--device cuda:0` 指定。评测和校准使用 FP32。
+默认优先 **CUDA/ROCm → Intel XPU → MLX GPU → MPS → CPU**。不预设硬件：`python -m xdecision.devices` 输出 CPU 架构（x86、ARM 或其它）及操作系统报告的指令集、GPU 运行时（NVIDIA CUDA、AMD ROCm、Intel XPU、Apple MPS、MLX 的 Metal 或 CUDA）以及训练将使用的后端、设备和精度。选中 MLX 时，`xdecision.train` 把通用参数交给 `xdecision.mlx_train`；`--backend torch` 或显式 `--device` 保持 PyTorch。多张 CUDA 卡按启动时空闲显存选一张，可通过 `CUDA_VISIBLE_DEVICES` 限定范围或 `--device cuda:0` 指定。评测和校准使用 FP32。
 
 | 训练设备 | 自动精度 |
 |---|---|
-| 支持原生 BF16 的 CUDA GPU | BF16 |
-| 其他 CUDA GPU | FP16 + GradScaler |
+| 支持原生 BF16 的 CUDA 或 ROCm GPU | BF16 |
+| 其他 CUDA/ROCm GPU | FP16 + GradScaler |
+| 支持 BF16 的 Intel XPU | BF16 |
 | Apple MPS、macOS 14+ | BF16 |
-| 较旧 MPS / CPU | FP32 |
+| 指令集报告 BF16（x86 AVX512-BF16/AMX、ARM BF16）且通过计时探测的 CPU | BF16 |
+| 较旧 MPS / 其它 XPU / 其它 CPU | FP32 |
+
+CPU 探测在每个进程中各计时一次 BF16 与 FP32 的 Transformer 规模矩阵乘，仅当结果与 FP32 一致且耗时低于 FP32 的 80% 时使用 BF16；读不到指令集时完全由探测决定。
 
 `--precision fp32` 可覆盖精度；显存不足时减小 `--max-tokens` / `--max-items`，启用 `--grad-ckpt`，用 `--accum` 增大有效批量。日志输出设备、精度与内存占用。CPU/MPS 已通过训练步验证；CUDA 选择分支测试通过，NVIDIA 实卡验证待完成。
 
