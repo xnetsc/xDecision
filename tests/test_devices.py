@@ -106,6 +106,17 @@ class TrainingSteps(unittest.TestCase):
     def test_cpu_step(self):
         self.step('cpu', 'fp32')
 
+    @unittest.skipUnless(devices.cpu_has_native_bf16(), 'CPU without AMX/AVX512-BF16')
+    def test_cpu_bf16_step(self):
+        self.assertEqual(devices.pick_precision(torch.device('cpu')), 'bf16')
+        self.step('cpu', 'bf16')
+
+    def test_cpu_bf16_requires_native_instructions(self):
+        with patch('xdecision.devices.cpu_has_native_bf16', return_value=False):
+            self.assertEqual(devices.pick_precision(torch.device('cpu')), 'fp32')
+            with self.assertRaises(ValueError):
+                devices.pick_precision(torch.device('cpu'), 'bf16')
+
     @unittest.skipUnless(torch.backends.mps.is_available(), 'MPS hardware required')
     def test_mps_step(self):
         self.step('mps', devices.pick_precision(torch.device('mps')))

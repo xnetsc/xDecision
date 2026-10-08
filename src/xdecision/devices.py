@@ -37,12 +37,28 @@ def pick_device(name=None):
     return torch.device("cpu")
 
 
+def cpu_has_native_bf16():
+    """AMX or AVX512-BF16 instructions, read from /proc/cpuinfo (Linux); False elsewhere.
+
+    Without them oneDNN emulates BF16 and is slower than FP32. With AMX a training step on
+    this model is about twice as fast as FP32.
+    """
+    try:
+        with open("/proc/cpuinfo") as f:
+            flags = f.read()
+    except OSError:
+        return False
+    return "amx_bf16" in flags or "avx512_bf16" in flags
+
+
 def supports_bf16(device):
     if device.type == "cuda":
         with torch.cuda.device(device):
             return torch.cuda.is_bf16_supported(including_emulation=False)
     if device.type == "mps":
         return torch.backends.mps.is_macos_or_newer(14, 0)
+    if device.type == "cpu":
+        return cpu_has_native_bf16()
     return False
 
 

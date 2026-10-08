@@ -1,8 +1,17 @@
-"""Validate published tokenized JSONL and build a local PyTorch cache."""
+"""Validate published tokenized JSONL and build a local PyTorch cache.
+
+  python -m xdecision.data_cache --input data/train/continuation.jsonl.gz --output work/train.pt
+  python -m xdecision.data_cache --input data/train/equivalence.jsonl.gz:12000 \
+      --input data/train/contrast_groups.jsonl.gz --output work/equivalence.pt
+
+`path:N` keeps a seeded sample of about N rows; equivalence groups are sampled whole. Group
+ids are renumbered per input so groups from different files never merge.
+"""
 import argparse
 import gzip
 import json
 import math
+import random
 from pathlib import Path
 import torch
 
@@ -29,15 +38,51 @@ def load_rows(path):
     return rows
 
 
+def combine(parts, rng):
+    """Concatenate (rows, n) parts, sampling n rows (whole groups) and renumbering group ids."""
+    out, next_group = [], 0
+    for rows, n in parts:
+        grouped = 'equiv_group' in rows[0]
+        if grouped:
+            groups = {}
+            for row in rows:
+                groups.setdefault(row['equiv_group'], []).append(row)
+            units = list(groups.values())
+        else:
+            units = [[row] for row in rows]
+        if n is not None and n < len(rows):
+            rng.shuffle(units)
+            kept, total = [], 0
+            for unit in units:
+                if total >= n:
+                    break
+                kept.append(unit)
+                total += len(unit)
+            units = kept
+        for unit in units:
+            if grouped:
+                unit = [dict(row, equiv_group=next_group) for row in unit]
+                next_group += 1
+            out += unit
+    return out
+
+
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument('--input',required=True)
+    parser.add_argument('--input',required=True,action='append',help='path or path:N (repeatable)')
     parser.add_argument('--output',required=True)
+    parser.add_argument('--seed',type=int,default=20261008)
     args=parser.parse_args()
     output=Path(args.output)
     if output.exists():
         raise FileExistsError(output)
-    rows=load_rows(args.input)
+    parts=[]
+    for spec in args.input:
+        path,sep,count=spec.rpartition(':')
+        if not sep or not count.isdigit():
+            path,count=spec,None
+        parts.append((load_rows(path),int(count) if count else None))
+    rows=combine(parts,random.Random(args.seed)) if len(parts)>1 or parts[0][1] is not None else parts[0][0]
     output.parent.mkdir(parents=True,exist_ok=True)
     torch.save(rows,output)
     print(f'Validated {len(rows)} records')
