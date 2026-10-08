@@ -106,16 +106,31 @@ class TrainingSteps(unittest.TestCase):
     def test_cpu_step(self):
         self.step('cpu', 'fp32')
 
-    @unittest.skipUnless(devices.cpu_has_native_bf16(), 'CPU without AMX/AVX512-BF16')
+    @unittest.skipUnless(devices.supports_bf16(torch.device('cpu')), 'BF16 is not faster than FP32 on this CPU')
     def test_cpu_bf16_step(self):
         self.assertEqual(devices.pick_precision(torch.device('cpu')), 'bf16')
         self.step('cpu', 'bf16')
 
-    def test_cpu_bf16_requires_native_instructions(self):
-        with patch('xdecision.devices.cpu_has_native_bf16', return_value=False):
-            self.assertEqual(devices.pick_precision(torch.device('cpu')), 'fp32')
-            with self.assertRaises(ValueError):
-                devices.pick_precision(torch.device('cpu'), 'bf16')
+    def test_cpu_bf16_follows_the_probe(self):
+        probe = devices.probe_cpu_bf16()
+        self.assertIs(probe, devices.probe_cpu_bf16())
+        self.assertIn('supported', probe)
+        for measured, precision in (({'supported': False, 'fp32_ms': 1, 'bf16_ms': 3}, 'fp32'),
+                                    ({'supported': False, 'error': 'RuntimeError: no kernel'}, 'fp32'),
+                                    ({'supported': True, 'fp32_ms': 3, 'bf16_ms': 1}, 'bf16')):
+            with self.subTest(measured=measured), patch('xdecision.devices._CPU_BF16_PROBE', measured):
+                self.assertEqual(devices.pick_precision(torch.device('cpu')), precision)
+                self.assertEqual(devices.device_info(torch.device('cpu'), precision)['cpu_bf16_probe'], measured)
+                if precision == 'fp32':
+                    with self.assertRaises(ValueError):
+                        devices.pick_precision(torch.device('cpu'), 'bf16')
+
+    def test_probe_failure_falls_back_to_fp32(self):
+        with patch('xdecision.devices._CPU_BF16_PROBE', None), \
+             patch('torch.autocast', side_effect=RuntimeError('unsupported')):
+            probe = devices.probe_cpu_bf16()
+            self.assertFalse(probe['supported'])
+            self.assertIn('unsupported', probe['error'])
 
     @unittest.skipUnless(torch.backends.mps.is_available(), 'MPS hardware required')
     def test_mps_step(self):
