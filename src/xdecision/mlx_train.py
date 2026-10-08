@@ -23,6 +23,7 @@ import torch
 from mlx.utils import tree_flatten
 
 from .mlx_model import export_laya, load_laya
+from .devices import cpu_report, mlx_report
 from .model_io import DEFAULT_BASE, load_tokenizer
 from .train import collate, token_batches
 from .training_recipe import add_recipe_arguments, validate_recipe, grouped_batches, recipe_metadata
@@ -124,7 +125,7 @@ def schedule(lr, total, warm):
                                  optim.cosine_decay(lr, max(1, total - warm), lr * 0.02)], [warm])
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser(fromfile_prefix_chars='@')
     ap.add_argument("--base", default=DEFAULT_BASE)
     ap.add_argument("--train", default="work/train.pt")
@@ -145,7 +146,7 @@ def main():
     ap.add_argument("--reset-act-head", action="store_true", help="Explicitly reset the action head")
     ap.add_argument("--seed", type=int, default=20260928)
     add_recipe_arguments(ap)
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
     validate_recipe(args)
 
     # MLX keeps freed buffers in a cache that is unbounded by default; on a machine that is
@@ -160,7 +161,8 @@ def main():
         reset_act_head(model, args.seed)
     model.encoder.embeddings.tok_embeddings.freeze()
     n_train = sum(v.size for _, v in tree_flatten(model.trainable_parameters()))
-    print(f"mlx device={mx.default_device()} trainable={n_train/1e6:.1f}M", flush=True)
+    print(json.dumps({"framework": "mlx", "device": str(mx.default_device()), "mlx": mlx_report(),
+                      "arch": cpu_report()["arch"], "trainable_m": round(n_train / 1e6, 1)}), flush=True)
 
     items = torch.load(args.train, map_location='cpu', weights_only=True)
     if not items:
